@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SportsMeeting.Server.Data;
 using SportsMeeting.Server.Models;
@@ -23,14 +24,13 @@ namespace SportsMeeting.Server.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<MeetingDto> getAllMeetings()
+        public async Task<List<MeetingDto>> getAllMeetings()
         {
-            var meetings = _dbContext.Meetings.ToList();
+            var meetings = await _dbContext.Meetings.ToListAsync();
             var meetingDto = _mapper.Map<List<MeetingDto>>(meetings);
-
+            
             return meetingDto;
         }
-
         public async Task createMeeting(CreateMeetingDto dto)
         {
             var meeting = _mapper.Map<Meeting>(dto);

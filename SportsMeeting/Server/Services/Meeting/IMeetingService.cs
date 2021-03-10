@@ -6,7 +6,7 @@ namespace SportsMeeting.Server.Services
 {
     public interface IMeetingService
     {
-        public IEnumerable<MeetingDto> getAllMeetings();
+        public Task<List<MeetingDto>> getAllMeetings();
         public Task createMeeting(CreateMeetingDto dto);
     }
 }

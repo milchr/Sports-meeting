@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SportsMeeting.Server.Services;
 using SportsMeeting.Shared.Dto;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace SportsMeeting.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]")]  
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingService _meetingService;
@@ -20,10 +21,9 @@ namespace SportsMeeting.Server.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<MeetingDto>> getMeetings()
+        public async Task<ActionResult<List<MeetingDto>>> getMeetings()
         {
-            
-            return Ok(_meetingService.getAllMeetings());
+            return Ok(await _meetingService.getAllMeetings());
         }
 
         [HttpPost("new_meeting")]

@@ -1,0 +1,48 @@
+﻿@page "/meeting"
+@inject NavigationManager _navigationManager
+@inject HttpClient http
+
+<h3>Spotkania</h3>
+<AuthorizeView Roles="User">
+    <Authorized Context="Auth">
+        <a href="/new_meeting" class="btn btn-primarybtn-md active"> Zaplanuj nowe spotkanie</a>
+        <h3>Lista Spotkań</h3>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tytuł</th>
+                    <th>Opis</th>
+                    <th>Limit Osób</th>
+                    <th>Miejsce</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var meeting in dto)
+                {
+                    <tr>
+                        <td>@meeting.Title</td>
+                        <td>@meeting.Description</td>
+                        <td>@meeting.PersonalLimit</td>
+                        <td>@meeting.Place</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </Authorized>
+    <NotAuthorized>
+        Nie masz uprawnień
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    private List<MeetingDto> dto = new List<MeetingDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        dto = await http.GetFromJsonAsync<List<MeetingDto>>("meeting");
+
+    }
+}
