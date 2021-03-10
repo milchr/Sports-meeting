@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SportsMeeting.Server.Data;
 using SportsMeeting.Server.Models;
+using SportsMeeting.Server.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 
@@ -53,6 +54,7 @@ namespace SportsMeeting.Server
             services.AddAuthentication()
                 .AddIdentityServerJwt();
             services.AddScoped<DataSeeder>();
+            services.AddTransient<IMeetingService, MeetingService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

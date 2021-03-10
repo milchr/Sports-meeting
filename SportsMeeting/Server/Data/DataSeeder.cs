@@ -52,7 +52,7 @@ namespace SportsMeeting.Server.Data
             if (userManager.Users.FirstOrDefault(u=>u.UserName == "admin") == null)
             {
                 ApplicationUser user = new ApplicationUser();
-                user.Email = "appadmin@localhost";
+                user.Email = "admin@localhost";
                 user.UserName = user.Email;
                 IdentityResult result = userManager.CreateAsync(user, "Admin123!").Result;
                 
