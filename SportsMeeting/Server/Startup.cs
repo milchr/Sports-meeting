@@ -57,6 +57,7 @@ namespace SportsMeeting.Server
             services.AddTransient<IMeetingService, MeetingService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddAutoMapper(this.GetType().Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
