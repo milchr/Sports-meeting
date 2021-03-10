@@ -26,8 +26,7 @@ namespace SportsMeeting.Server.Data
         public void SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             SeedRoles(roleManager);
-            SeedUsers(userManager);
-            
+            SeedUsers(userManager);  
         }
 
         public void SeedRoles(RoleManager<IdentityRole> roleManager)
