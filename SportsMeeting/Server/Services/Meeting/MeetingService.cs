@@ -34,8 +34,8 @@ namespace SportsMeeting.Server.Services
         public async Task createMeeting(CreateMeetingDto dto)
         {
             var meeting = _mapper.Map<Meeting>(dto);
-            _dbContext.Meetings.Add(meeting);
-            _dbContext.SaveChanges();
+            _dbContext.Meetings.AddAsync(meeting);
+            _dbContext.SaveChangesAsync();
         }
     }
 }

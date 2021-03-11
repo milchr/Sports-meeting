@@ -1,0 +1,40 @@
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SportsMeeting.Server.Data;
+using SportsMeeting.Server.Models;
+using SportsMeeting.Shared.Dto;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace SportsMeeting.Server.Services
+{
+    public class ConversationService : IConversationService
+    {
+        private readonly ApplicationDbContext _dbContext;
+        private readonly IMapper _mapper;
+        private readonly ILogger<ConversationService> _logger;
+        public ConversationService(ApplicationDbContext dbContext, ILogger<ConversationService> logger, IMapper mapper)
+        {
+            _dbContext = dbContext;
+            _logger = logger;
+            _mapper = mapper;
+        }
+
+        public async Task createConversation(CreateConversationDto dto)
+        {
+            var conversation = _mapper.Map<Conversation>(dto);
+            _dbContext.Conversations.AddAsync(conversation);
+            _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<ConversationDto>> getAllConversations()
+        {
+            var conversationDto = _dbContext.Conversations.ToListAsync();
+            var conversationsDto = _mapper.Map<List<ConversationDto>>(conversationDto);
+            return conversationsDto;
+        }
+    }
+}
