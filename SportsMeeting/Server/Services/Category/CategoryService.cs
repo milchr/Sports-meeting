@@ -26,7 +26,7 @@ namespace SportsMeeting.Server.Services
         public async Task createCategory(CreateCategoryDto dto)
         {
             var category = _mapper.Map<Category>(dto);
-            _dbContext.Add(category);
+            _dbContext.Category.Add(category);
             _dbContext.SaveChanges();
         }
 
