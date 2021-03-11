@@ -27,13 +27,13 @@ namespace SportsMeeting.Server.Services
         public async Task createMessage(CreateMessageDto dto)
         {
             var message = _mapper.Map<Message>(dto);
-            _dbContext.Messages.AddAsync(message);
-            _dbContext.SaveChangesAsync();
+            await _dbContext.Messages.AddAsync(message);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<MessageDto>> getAllMessages()
         {
-            var messages = _dbContext.Messages.ToListAsync();
+            var messages = await _dbContext.Messages.ToListAsync();
             var messageDto = _mapper.Map<List<MessageDto>>(messages);
             return messageDto;
         }

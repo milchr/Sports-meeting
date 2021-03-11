@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SportsMeeting.Server.Services
 {
-    public interface IMessageService
+    public interface IParticipantService
     {
-        public Task<List<MessageDto>> getAllMessages();
-        public Task createMessage(CreateMessageDto dto);
+        public Task<List<ParticipantDto>> getAllParticipants();
+        public Task createParticipant(CreateParticipantDto dto);
     }
 }
