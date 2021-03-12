@@ -30,6 +30,20 @@ namespace SportsMeeting.Server.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<Category> deleteCategory(int Id)
+        {
+            var result = await _dbContext.Category
+               .FirstOrDefaultAsync(e => e.Id == Id);
+            if (result != null)
+            {
+                _dbContext.Category.Remove(result);
+                await _dbContext.SaveChangesAsync();
+                return result;
+            }
+
+            return null;
+        }
+
         public async Task<List<CategoryDto>> getAllCategories()
         {
             var category = await _dbContext.Category.ToListAsync();

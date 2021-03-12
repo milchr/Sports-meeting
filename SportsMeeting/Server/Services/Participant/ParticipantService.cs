@@ -37,5 +37,19 @@ namespace SportsMeeting.Server.Services
             var particiapntDto = _mapper.Map<List<ParticipantDto>>(participants);
             return particiapntDto;
         }
+
+        public async Task<Participant> deleteParticipant(int Id)
+        {
+            var result = await _dbContext.Participants
+                .FirstOrDefaultAsync(e => e.Id == Id);
+            if (result != null)
+            {
+                _dbContext.Participants.Remove(result);
+                await _dbContext.SaveChangesAsync();
+                return result;
+            }
+
+            return null;
+        }
     }
 }

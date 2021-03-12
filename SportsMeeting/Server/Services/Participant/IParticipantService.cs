@@ -1,4 +1,5 @@
-﻿using SportsMeeting.Shared.Dto;
+﻿using SportsMeeting.Server.Models;
+using SportsMeeting.Shared.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace SportsMeeting.Server.Services
     {
         public Task<List<ParticipantDto>> getAllParticipants();
         public Task createParticipant(CreateParticipantDto dto);
+        public Task<Participant> deleteParticipant(int Id);
+
     }
 }

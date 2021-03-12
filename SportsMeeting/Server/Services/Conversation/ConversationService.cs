@@ -30,6 +30,20 @@ namespace SportsMeeting.Server.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<Conversation> deleteConversation(int Id)
+        {
+            var result = await _dbContext.Conversations
+                .FirstOrDefaultAsync(e => e.Id == Id);
+            if (result != null)
+            {
+                _dbContext.Conversations.Remove(result);
+                await _dbContext.SaveChangesAsync();
+                return result;
+            }
+
+            return null;
+        }
+
         public async Task<List<ConversationDto>> getAllConversations()
         {
             var conversationDto = await _dbContext.Conversations.ToListAsync();
