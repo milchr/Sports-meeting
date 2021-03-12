@@ -13,5 +13,7 @@ namespace SportsMeeting.Server.Services
 
         public Task createCategory(CreateCategoryDto dto);
         public Task<Category> deleteCategory(int Id);
+        public Task<Category> updateConversation(Category category);
+
     }
 }

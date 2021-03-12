@@ -10,5 +10,7 @@ namespace SportsMeeting.Server.Services
         public Task<List<MeetingDto>> getAllMeetings();
         public Task createMeeting(CreateMeetingDto dto);
         public Task<Meeting> deleteMeeting(int Id);
+        public Task<Meeting> updateMeeting(Meeting meeting);
+
     }
 }

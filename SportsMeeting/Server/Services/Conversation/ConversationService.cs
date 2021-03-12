@@ -50,5 +50,26 @@ namespace SportsMeeting.Server.Services
             var conversationsDto = _mapper.Map<List<ConversationDto>>(conversationDto);
             return conversationsDto;
         }
+
+        public async Task<Conversation> updateConversation(Conversation conversation)
+        {
+            var result = await _dbContext.Conversations
+              .FirstOrDefaultAsync(e => e.Id == conversation.Id);
+
+            if (result != null)
+            {
+                result.Meeting = conversation.Meeting;
+                result.MeetingId = conversation.MeetingId;
+                result.Message = conversation.Message;
+                result.Participant = conversation.Participant;
+                result.Title = conversation.Title;
+
+                await _dbContext.SaveChangesAsync();
+
+                return result;
+            }
+
+            return null;
+        }
     }
 }

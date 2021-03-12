@@ -51,5 +51,29 @@ namespace SportsMeeting.Server.Services
 
             return null;
         }
+
+        public async Task<Meeting> updateMeeting(Meeting meeting)
+        {
+            var result = await _dbContext.Meetings
+               .FirstOrDefaultAsync(e => e.Id == meeting.Id);
+
+            if (result != null)
+            {
+                result.Title = meeting.Title;
+                result.Description = meeting.Description;
+                result.Place = meeting.Place;
+                result.UserId = meeting.UserId;
+                result.PersonalLimit = meeting.PersonalLimit;
+                result.Conversation = meeting.Conversation;
+                result.Participant = meeting.Participant;
+                result.Category = meeting.Category;
+
+                await _dbContext.SaveChangesAsync();
+
+                return result;
+            }
+
+            return null;
+        }
     }
 }
