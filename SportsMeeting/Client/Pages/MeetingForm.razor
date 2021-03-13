@@ -15,6 +15,14 @@
                 <InputText id="description" @bind-Value="dto.Description" class="form-control" />
             </div>
             <div class="form-group">
+                <InputSelect class="form-select" @bind-Value="dto.categoryName" aria-label="Default select example">
+                    <option selected>Wybierz kategorię</option>
+                    <option value="football">Piłka nożna</option>
+                    <option value="golf">Golf</option>
+                    <option value="volleyball">Siatkówka</option>
+                </InputSelect>         
+            </div>
+            <div class="form-group">
                 <label for="personallimit">Limit</label>
                 <InputNumber id="personallimit" @bind-Value="dto.PersonalLimit" class="form-control" />
             </div>
@@ -31,7 +39,7 @@
 </AuthorizeView>
 @code {
     private CreateMeetingDto dto = new CreateMeetingDto();
-
+    //private CreateCategoryDto category = new CreateCategoryDto();
     private async void HandleCreateMeeting() {
         HttpResponseMessage response = await http.PostAsJsonAsync("meeting/new_meeting", dto);
         _navigationManager.NavigateTo("/meeting");

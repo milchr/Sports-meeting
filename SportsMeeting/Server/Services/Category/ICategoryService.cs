@@ -10,10 +10,9 @@ namespace SportsMeeting.Server.Services
     public interface ICategoryService
     {
         public Task<List<CategoryDto>> getAllCategories();
-
         public Task createCategory(CreateCategoryDto dto);
-        public Task<Category> deleteCategory(int Id);
-        public Task<Category> updateConversation(Category category);
+        public Task deleteCategory(int Id);
+        public Task updateCategory(int id, CategoryDto category);
 
     }
 }

@@ -26,7 +26,8 @@ namespace SportsMeeting.Server.Data
         public void SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             SeedRoles(roleManager);
-            SeedUsers(userManager);  
+            SeedUsers(userManager);
+            SeedCategories();
         }
 
         public void SeedRoles(RoleManager<IdentityRole> roleManager)
@@ -72,6 +73,24 @@ namespace SportsMeeting.Server.Data
                 {
                     userManager.AddToRoleAsync(user, "User").Wait();
                 }
+            }
+        }
+
+        public void SeedCategories()
+        {
+            if(_dbContext.Category.FirstOrDefault(c=>c.Name == "football") == null)
+            {
+                Category category = new Category();
+                category.Name = "football";
+                _dbContext.Category.Add(category);
+                _dbContext.SaveChanges();
+            }
+            if (_dbContext.Category.FirstOrDefault(c => c.Name == "golf") == null)
+            {
+                Category category = new Category();
+                category.Name = "golf";
+                _dbContext.Category.Add(category);
+                _dbContext.SaveChanges();
             }
         }
 

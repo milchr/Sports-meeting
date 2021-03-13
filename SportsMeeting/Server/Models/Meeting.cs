@@ -14,6 +14,6 @@ namespace SportsMeeting.Server.Models
         public string Place { get; set; }
         public virtual Conversation Conversation { get; set; }
         public virtual List<Participant> Participant { get; set; }
-        public virtual List<Category> Category { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

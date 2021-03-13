@@ -30,7 +30,7 @@ namespace SportsMeeting.Server.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Category> deleteCategory(int Id)
+        public async Task deleteCategory(int Id)
         {
             var result = await _dbContext.Category
                .FirstOrDefaultAsync(e => e.Id == Id);
@@ -38,10 +38,7 @@ namespace SportsMeeting.Server.Services
             {
                 _dbContext.Category.Remove(result);
                 await _dbContext.SaveChangesAsync();
-                return result;
             }
-
-            return null;
         }
 
         public async Task<List<CategoryDto>> getAllCategories()
@@ -51,24 +48,20 @@ namespace SportsMeeting.Server.Services
             return categoryDto;
         }
 
-        public async Task<Category> updateConversation(Category category)
+        public async Task updateCategory(int id, CategoryDto category)
         {
             var result = await _dbContext.Category
-              .FirstOrDefaultAsync(e => e.Id == category.Id);
+              .FirstOrDefaultAsync(e => e.Id == id);
 
             if (result != null)
-            {
-                result.Meeting = category.Meeting;
-                result.MeetingId = category.MeetingId;
+            { 
                 result.Name = category.Name;
                 result.Description = category.Description;
 
+                _dbContext.Category.Update(result);
                 await _dbContext.SaveChangesAsync();
-
-                return result;
             }
 
-            return null;
         }
     }
 }

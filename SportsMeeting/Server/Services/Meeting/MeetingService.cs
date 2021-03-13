@@ -36,6 +36,7 @@ namespace SportsMeeting.Server.Services
             var meeting = _mapper.Map<Meeting>(dto);
             var u = _dbContext.Users.FirstOrDefault(u => u.Email == user);
             u.Meeting = meeting;
+            meeting.Category = _dbContext.Category.FirstOrDefault(c => c.Name == dto.categoryName);
             await _dbContext.Meetings.AddAsync(meeting);
             await _dbContext.SaveChangesAsync();
         }
