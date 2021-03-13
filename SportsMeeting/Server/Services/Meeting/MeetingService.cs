@@ -31,49 +31,41 @@ namespace SportsMeeting.Server.Services
             
             return meetingDto;
         }
-        public async Task createMeeting(CreateMeetingDto dto)
+        public async Task createMeeting(CreateMeetingDto dto, string user)
         {
             var meeting = _mapper.Map<Meeting>(dto);
+            var u = _dbContext.Users.FirstOrDefault(u => u.Email == user);
+            u.Meeting = meeting;
             await _dbContext.Meetings.AddAsync(meeting);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Meeting> deleteMeeting(int Id)
+        public async Task deleteMeeting(int Id)
         {
             var result = await _dbContext.Meetings
-                .FirstOrDefaultAsync(e => e.Id == Id);
+                .FirstOrDefaultAsync(r => r.Id == Id);
             if (result != null)
             {
                 _dbContext.Meetings.Remove(result);
                 await _dbContext.SaveChangesAsync();
-                return result;
             }
-
-            return null;
         }
 
-        public async Task<Meeting> updateMeeting(Meeting meeting)
+        public async Task updateMeeting(int id, MeetingDto meeting)
         {
             var result = await _dbContext.Meetings
-               .FirstOrDefaultAsync(e => e.Id == meeting.Id);
+               .FirstOrDefaultAsync(r => r.Id == id);
 
             if (result != null)
             {
                 result.Title = meeting.Title;
                 result.Description = meeting.Description;
                 result.Place = meeting.Place;
-                result.UserId = meeting.UserId;
                 result.PersonalLimit = meeting.PersonalLimit;
-                result.Conversation = meeting.Conversation;
-                result.Participant = meeting.Participant;
-                result.Category = meeting.Category;
 
+                _dbContext.Meetings.Update(result);
                 await _dbContext.SaveChangesAsync();
-
-                return result;
             }
-
-            return null;
         }
     }
 }

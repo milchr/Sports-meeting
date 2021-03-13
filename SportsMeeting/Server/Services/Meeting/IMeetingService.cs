@@ -8,9 +8,9 @@ namespace SportsMeeting.Server.Services
     public interface IMeetingService
     {
         public Task<List<MeetingDto>> getAllMeetings();
-        public Task createMeeting(CreateMeetingDto dto);
-        public Task<Meeting> deleteMeeting(int Id);
-        public Task<Meeting> updateMeeting(Meeting meeting);
+        public Task createMeeting(CreateMeetingDto dto, string user);
+        public Task deleteMeeting(int Id);
+        public Task updateMeeting(int id, MeetingDto meeting);
 
     }
 }
