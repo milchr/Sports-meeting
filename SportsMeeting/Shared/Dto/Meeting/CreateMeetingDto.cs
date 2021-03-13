@@ -8,7 +8,6 @@ namespace SportsMeeting.Shared.Dto
 {
     public class CreateMeetingDto
     {
-        public int UserId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int PersonalLimit { get; set; }
