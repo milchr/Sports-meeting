@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using SportsMeeting.Client.Pages;
+using System.Net.Http;
 
 namespace SportsMeeting.Server.Controllers
 {
@@ -15,6 +17,7 @@ namespace SportsMeeting.Server.Controllers
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingService _meetingService;
+
 
         public MeetingController(IMeetingService meetingService)
         {
@@ -56,26 +59,10 @@ namespace SportsMeeting.Server.Controllers
         }
 
         [HttpPost("edit")]
-        public async Task<ActionResult<MeetingDto>> postEditMeeting([FromBody] MeetingDto dto)
+        public async Task getMeetingToEdit([FromBody] MeetingDto dto)
         {
-            var id = dto.Id;
-            //Redirect("/meeting/edit/" + id);
-            //RedirectToRoutePreserveMethod("meeting/getedit", dto);
-            return Ok(dto);
-        }
-
-        [HttpGet("edit/{id}")]
-        public async Task<ActionResult<MeetingDto>> getEditMeeting([FromRoute] int id)
-        {
-            return Ok(await _meetingService.getMeeting(id));
-        }
-
-        [HttpPatch("edit")]
-        public async Task<IActionResult> editMeeting(MeetingDto dto)
-        {
-            var id = dto.Id;
-            await _meetingService.updateMeeting(id, dto);
-            return Ok();
-        }
+            var meetingId = dto.Id;
+            await _meetingService.updateMeeting(meetingId, dto);
+        }     
     }
 }
