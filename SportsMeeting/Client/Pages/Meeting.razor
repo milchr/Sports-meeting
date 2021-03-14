@@ -3,7 +3,7 @@
 @inject HttpClient http
 
 <h3>Spotkania</h3>
-<AuthorizeView Roles="User">
+<AuthorizeView Roles="User, Admin">
     <Authorized Context="Auth">
         <a class="btn btn-primary btn-md active" href="/new_meeting"> Zaplanuj nowe spotkanie</a>
         <h3>Lista Spotkań</h3>
@@ -18,14 +18,19 @@
                     <h5 class="card-title">@meeting.Description</h5>
                     <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
 
-                    <a href="#" class="btn btn-primary">Dołącz</a>
+                    <a href="#" class="btn btn-primary">Dołącz</a><br />
+                    @if (meeting.CreatedByName == Auth.User.Identity.Name)
+                    {
+                        var editmeeting = meeting;
+                        <a href="#" class="btn btn-primary" @onclick="() => EditHandler(editmeeting)">Edit</a>
+                    }
                 </div>
                 <div class="card-footer text-muted">
-                     2 days ago
+                    2 days ago
                 </div>
             </div>
             <br />
-        }        
+        }
     </Authorized>
     <NotAuthorized>
         Nie masz uprawnień
@@ -38,8 +43,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-
         dto = await http.GetFromJsonAsync<List<MeetingDto>>("meeting");
 
     }
+
+    private async Task EditHandler(MeetingDto meeting)
+    {
+        await http.PostAsJsonAsync<MeetingDto>("edit", meeting);
+       // _navigationManager.NavigateTo("meeting/edit");
+    }
+
 }

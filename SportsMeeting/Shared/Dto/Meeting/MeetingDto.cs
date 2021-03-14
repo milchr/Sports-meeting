@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace SportsMeeting.Shared.Dto
 {
     public class MeetingDto
@@ -13,5 +14,7 @@ namespace SportsMeeting.Shared.Dto
         public string Description { get; set; }
         public int PersonalLimit { get; set; }
         public string Place { get; set; }
+        public string CreatedByName { get; set; }
+
     }
 }

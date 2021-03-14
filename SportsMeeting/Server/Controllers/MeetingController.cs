@@ -27,6 +27,12 @@ namespace SportsMeeting.Server.Controllers
             return Ok(await _meetingService.getAllMeetings());
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MeetingDto>> getMeeting([FromRoute]int id)
+        {
+            return Ok(await _meetingService.getMeeting(id));
+        }
+
         [HttpPost("new_meeting")]
         public async Task<IActionResult> createMeeting([FromBody] CreateMeetingDto dto)
         {
@@ -42,9 +48,32 @@ namespace SportsMeeting.Server.Controllers
             return Ok();
         }
 
-        [HttpPatch("edit/{id}")]
+        [HttpPatch("update/{id}")]
         public async Task<IActionResult> updateMeeting([FromRoute] int id, [FromBody] MeetingDto dto)
         {
+            await _meetingService.updateMeeting(id, dto);
+            return Ok();
+        }
+
+        [HttpPost("edit")]
+        public async Task<ActionResult<MeetingDto>> postEditMeeting([FromBody] MeetingDto dto)
+        {
+            var id = dto.Id;
+            //Redirect("/meeting/edit/" + id);
+            //RedirectToRoutePreserveMethod("meeting/getedit", dto);
+            return Ok(dto);
+        }
+
+        [HttpGet("edit/{id}")]
+        public async Task<ActionResult<MeetingDto>> getEditMeeting([FromRoute] int id)
+        {
+            return Ok(await _meetingService.getMeeting(id));
+        }
+
+        [HttpPatch("edit")]
+        public async Task<IActionResult> editMeeting(MeetingDto dto)
+        {
+            var id = dto.Id;
             await _meetingService.updateMeeting(id, dto);
             return Ok();
         }

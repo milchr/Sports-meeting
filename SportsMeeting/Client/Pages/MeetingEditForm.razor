@@ -1,0 +1,46 @@
+﻿@page "/meeting/edit"
+@inject NavigationManager _navigationManager
+@inject HttpClient http
+@using SportsMeeting.Shared.Dto
+<h3>MeetingForm</h3>
+<AuthorizeView Roles="User">
+    <Authorized Context="Auth">
+        <EditForm Model="dto" OnSubmit="HandleEditMeeting">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <InputText id="title" @bind-Value="dto.Title" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <InputText id="description" @bind-Value="dto.Description" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="personallimit">Limit</label>
+                <InputNumber id="personallimit" @bind-Value="dto.PersonalLimit" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="place">Place</label>
+                <InputText id="place" @bind-Value="dto.Place" class="form-control" />
+            </div>
+            <button type="submit">Edytuj spotkanie</button>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <p>Nie masz uprawnień</p>
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    private MeetingDto dto = new MeetingDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        dto = await http.GetFromJsonAsync<MeetingDto>("edit");
+
+    }
+
+    private async void HandleEditMeeting()
+    {
+        HttpResponseMessage response = await http.PostAsJsonAsync("meeting/new_meeting", dto);
+        _navigationManager.NavigateTo("/meeting");
+    }
+}

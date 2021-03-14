@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SportsMeeting.Server.Data;
@@ -16,12 +17,23 @@ namespace SportsMeeting.Server.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly ILogger<MeetingService> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MeetingService(ApplicationDbContext dbContext, ILogger<MeetingService> logger, IMapper mapper)
+        public MeetingService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<MeetingService> logger, IMapper mapper)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
             _logger = logger;
             _mapper = mapper;
+            
+        }
+
+        public async Task<MeetingDto> getMeeting(int id)
+        {
+            var meeting = await _dbContext.Meetings.FirstOrDefaultAsync(m => m.Id == id);
+            var meetingDto = _mapper.Map<MeetingDto>(meeting);
+
+            return meetingDto;
         }
 
         public async Task<List<MeetingDto>> getAllMeetings()
@@ -31,9 +43,11 @@ namespace SportsMeeting.Server.Services
             
             return meetingDto;
         }
+
         public async Task createMeeting(CreateMeetingDto dto, string user)
         {
             var meeting = _mapper.Map<Meeting>(dto);
+            meeting.CreatedByName = user;
             var u = _dbContext.Users.FirstOrDefault(u => u.Email == user);
             u.Meeting = meeting;
             meeting.Category = _dbContext.Category.FirstOrDefault(c => c.Name == dto.categoryName);
