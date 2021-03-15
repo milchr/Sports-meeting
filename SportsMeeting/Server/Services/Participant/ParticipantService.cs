@@ -44,7 +44,7 @@ namespace SportsMeeting.Server.Services
             return particiapntDto;
         }
 
-        public async Task<Participant> deleteParticipant(int Id)
+        public async Task deleteParticipant(int Id)
         {
             var result = await _dbContext.Participants
                 .FirstOrDefaultAsync(e => e.Id == Id);
@@ -52,10 +52,8 @@ namespace SportsMeeting.Server.Services
             {
                 _dbContext.Participants.Remove(result);
                 await _dbContext.SaveChangesAsync();
-                return result;
             }
 
-            return null;
         }
 
         public async Task updateParticipant(int id, ParticipantDto participant)
@@ -68,6 +66,7 @@ namespace SportsMeeting.Server.Services
                 result.ConversationId = participant.ConversationId;
                 result.UserId = participant.UserId;
 
+                _dbContext.Participants.Update(result);
                 await _dbContext.SaveChangesAsync();
             }
         }
