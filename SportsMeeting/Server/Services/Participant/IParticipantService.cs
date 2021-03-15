@@ -10,9 +10,10 @@ namespace SportsMeeting.Server.Services
     public interface IParticipantService
     {
         public Task<List<ParticipantDto>> getAllParticipants();
+        public Task<ParticipantDto> getParticipant(int id);
         public Task createParticipant(CreateParticipantDto dto);
-        public Task<Participant> deleteParticipant(int Id);
-        public Task<Participant> updateParticipant(Participant participant);
+        public Task deleteParticipant(int Id);
+        public Task updateParticipant(int id, ParticipantDto participant);
 
     }
 }

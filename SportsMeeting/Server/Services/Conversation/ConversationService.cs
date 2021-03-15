@@ -51,6 +51,13 @@ namespace SportsMeeting.Server.Services
             return conversationsDto;
         }
 
+        public async Task<ConversationDto> getConversation(int id)
+        {
+            var conversation = await _dbContext.Conversations.FirstOrDefaultAsync(c => c.Id == id);
+            var conversationDto = _mapper.Map<ConversationDto>(conversation);
+            return conversationDto;
+        }
+
         public async Task<Conversation> updateConversation(Conversation conversation)
         {
             var result = await _dbContext.Conversations

@@ -71,5 +71,13 @@ namespace SportsMeeting.Server.Services
 
             return null;
         }
+
+        public async Task<MessageDto> getMessage(int id)
+        {
+            var message = await _dbContext.Messages.FirstOrDefaultAsync(m => m.Id == id);
+            var messageDto = _mapper.Map<MessageDto>(message);
+
+            return messageDto;
+        }
     }
 }

@@ -4,9 +4,7 @@ using Microsoft.Extensions.Logging;
 using SportsMeeting.Server.Data;
 using SportsMeeting.Server.Models;
 using SportsMeeting.Shared.Dto;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SportsMeeting.Server.Services
@@ -26,9 +24,17 @@ namespace SportsMeeting.Server.Services
 
         public async Task createParticipant(CreateParticipantDto dto)
         {
-           var participant = _mapper.Map<Participant>(dto);
-           await _dbContext.Participants.AddAsync(participant);
-           await _dbContext.SaveChangesAsync();
+            var participant = _mapper.Map<Participant>(dto);
+            await _dbContext.Participants.AddAsync(participant);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<ParticipantDto> getParticipant(int id)
+        {
+            var participant = await _dbContext.Participants.FirstOrDefaultAsync(p => p.Id == id);
+            var participantDto = _mapper.Map<ParticipantDto>(participant);
+
+            return participantDto;
         }
 
         public async Task<List<ParticipantDto>> getAllParticipants()
@@ -51,26 +57,19 @@ namespace SportsMeeting.Server.Services
 
             return null;
         }
-        public async Task<Participant> updateParticipant(Participant participant)
+
+        public async Task updateParticipant(int id, ParticipantDto participant)
         {
             var result = await _dbContext.Participants
-                .FirstOrDefaultAsync(e => e.Id == participant.Id);
+                .FirstOrDefaultAsync(e => e.Id == id);
 
             if (result != null)
             {
-                result.Conversation = participant.Conversation;
                 result.ConversationId = participant.ConversationId;
-                result.Meeting = participant.Meeting;
-                result.User = participant.User;
                 result.UserId = participant.UserId;
-                
 
                 await _dbContext.SaveChangesAsync();
-
-                return result;
             }
-
-            return null;
         }
     }
 }
