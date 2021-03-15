@@ -56,7 +56,7 @@ namespace SportsMeeting.Server.Services
             return conversationDto;
         }
 
-        public async Task<Conversation> updateConversation(Conversation conversation)
+        public async Task updateConversation(Conversation conversation)
         {
             var result = await _dbContext.Conversations
               .FirstOrDefaultAsync(e => e.Id == conversation.Id);
@@ -68,13 +68,11 @@ namespace SportsMeeting.Server.Services
                 result.Message = conversation.Message;
                 result.Participant = conversation.Participant;
                 result.Title = conversation.Title;
-
+                _dbContext.Conversations.Update(result);
                 await _dbContext.SaveChangesAsync();
 
-                return result;
             }
 
-            return null;
         }
     }
 }

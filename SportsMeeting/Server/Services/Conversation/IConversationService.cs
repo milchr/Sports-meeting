@@ -13,7 +13,7 @@ namespace SportsMeeting.Server.Services
         public Task<ConversationDto> getConversation(int id);
         public Task createConversation(CreateConversationDto dto);
         public Task deleteConversation(int Id);
-        public Task<Conversation> updateConversation(Conversation conversation);
+        public Task updateConversation(Conversation conversation);
 
 
     }
