@@ -10,9 +10,10 @@ namespace SportsMeeting.Server.Services
     public interface IMessageService
     {
         public Task<List<MessageDto>> getAllMessages();
+        public Task<MessageDto> getMessage(int id);
         public Task createMessage(CreateMessageDto dto);
-        public Task<Message> deleteMessage(int Id);
-        public Task<Message> updateMessage(Message message);
+        public Task deleteMessage(int Id);
+        public Task updateMessage(MessageDto message, int id);
 
     }
 }

@@ -48,6 +48,13 @@ namespace SportsMeeting.Server.Services
             return categoryDto;
         }
 
+        public async Task<CategoryDto> getCategory(int id)
+        {
+            var category = await _dbContext.Category.FirstOrDefaultAsync(c => c.Id == id);
+            var categoryDto = _mapper.Map<CategoryDto>(category);
+            return categoryDto;
+        }
+
         public async Task updateCategory(int id, CategoryDto category)
         {
             var result = await _dbContext.Category

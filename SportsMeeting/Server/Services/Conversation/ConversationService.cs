@@ -30,7 +30,7 @@ namespace SportsMeeting.Server.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Conversation> deleteConversation(int Id)
+        public async Task deleteConversation(int Id)
         {
             var result = await _dbContext.Conversations
                 .FirstOrDefaultAsync(e => e.Id == Id);
@@ -38,10 +38,8 @@ namespace SportsMeeting.Server.Services
             {
                 _dbContext.Conversations.Remove(result);
                 await _dbContext.SaveChangesAsync();
-                return result;
-            }
 
-            return null;
+            }
         }
 
         public async Task<List<ConversationDto>> getAllConversations()
@@ -51,7 +49,14 @@ namespace SportsMeeting.Server.Services
             return conversationsDto;
         }
 
-        public async Task<Conversation> updateConversation(Conversation conversation)
+        public async Task<ConversationDto> getConversation(int id)
+        {
+            var conversation = await _dbContext.Conversations.FirstOrDefaultAsync(c => c.Id == id);
+            var conversationDto = _mapper.Map<ConversationDto>(conversation);
+            return conversationDto;
+        }
+
+        public async Task updateConversation(Conversation conversation)
         {
             var result = await _dbContext.Conversations
               .FirstOrDefaultAsync(e => e.Id == conversation.Id);
@@ -63,13 +68,11 @@ namespace SportsMeeting.Server.Services
                 result.Message = conversation.Message;
                 result.Participant = conversation.Participant;
                 result.Title = conversation.Title;
-
+                _dbContext.Conversations.Update(result);
                 await _dbContext.SaveChangesAsync();
 
-                return result;
             }
 
-            return null;
         }
     }
 }
