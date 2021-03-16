@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsMeeting.Server.Data;
 
 namespace SportsMeeting.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210316124051_meeting_update_3")]
+    partial class meeting_update_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -389,9 +391,6 @@ namespace SportsMeeting.Server.Data.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserEmail")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(450)");
 
@@ -399,7 +398,9 @@ namespace SportsMeeting.Server.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("UserName");
+                    b.HasIndex("UserName")
+                        .IsUnique()
+                        .HasFilter("[UserName] IS NOT NULL");
 
                     b.ToTable("Meetings");
                 });
@@ -531,8 +532,8 @@ namespace SportsMeeting.Server.Data.Migrations
                         .HasForeignKey("CategoryId");
 
                     b.HasOne("SportsMeeting.Server.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Meetings")
-                        .HasForeignKey("UserName")
+                        .WithOne("Meeting")
+                        .HasForeignKey("SportsMeeting.Server.Models.Meeting", "UserName")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ApplicationUser");
@@ -582,7 +583,7 @@ namespace SportsMeeting.Server.Data.Migrations
 
             modelBuilder.Entity("SportsMeeting.Server.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Meetings");
+                    b.Navigation("Meeting");
                 });
 
             modelBuilder.Entity("SportsMeeting.Server.Models.Conversation", b =>

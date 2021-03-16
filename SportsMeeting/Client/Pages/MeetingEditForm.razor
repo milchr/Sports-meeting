@@ -5,6 +5,9 @@
 <h3>MeetingForm</h3>
 <AuthorizeView Roles="User">
     <Authorized Context="Auth">
+        <EditForm Model="meeting" OnSubmit="HandleDelete">
+            <button class="btn btn-danger btn-md active" type="submit">Usuń spotkanie</button>
+        </EditForm>
         <EditForm Model="meeting" OnSubmit="HandleEditMeeting">
             <div class="form-group">
                 <label for="title">Title</label>
@@ -44,8 +47,15 @@
 
     private async void HandleEditMeeting()
     {
-        
+
         HttpResponseMessage response = await http.PostAsJsonAsync("meeting/edit", meeting);
+        _navigationManager.NavigateTo("/meeting");
+    }
+
+    private async void HandleDelete()
+    {
+        var id = meeting.Id;
+        HttpResponseMessage response = await http.DeleteAsync("meeting/delete/" + id);
         _navigationManager.NavigateTo("/meeting");
     }
 

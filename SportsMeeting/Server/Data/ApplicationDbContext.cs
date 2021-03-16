@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SportsMeeting.Server.Models;
@@ -30,5 +31,18 @@ namespace SportsMeeting.Server.Data
         {
             optionsBuilder.UseSqlServer(_connectionStr);
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(m => m.Meetings)
+                .WithOne(u => u.ApplicationUser)
+                .HasForeignKey(m => m.UserName)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+
+       
     }
 }

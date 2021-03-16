@@ -46,12 +46,13 @@ namespace SportsMeeting.Server.Services
 
         public async Task createMeeting(CreateMeetingDto dto, string user)
         {
-            var meeting = _mapper.Map<Meeting>(dto);
-            meeting.CreatedByName = user;
+            var meeting = _mapper.Map<Meeting>(dto);         
             var u = _dbContext.Users.FirstOrDefault(u => u.Email == user);
-            u.Meeting = meeting;
+            meeting.UserName = u.Id;
+            meeting.UserEmail = u.Email; 
             meeting.Category = _dbContext.Category.FirstOrDefault(c => c.Name == dto.categoryName);
             await _dbContext.Meetings.AddAsync(meeting);
+            u.Meetings.Add(meeting);
             await _dbContext.SaveChangesAsync();
         }
 

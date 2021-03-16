@@ -19,7 +19,7 @@
                     <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
 
                     <a href="#" class="btn btn-primary">Dołącz</a><br />
-                    @if (meeting.CreatedByName == Auth.User.Identity.Name)
+                    @if (meeting.UserEmail == Auth.User.Identity.Name)
                     {
                         var editmeeting = meeting;    
                         <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">

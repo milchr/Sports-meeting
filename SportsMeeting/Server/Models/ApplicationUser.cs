@@ -10,6 +10,6 @@ namespace SportsMeeting.Server.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public virtual Meeting Meeting { get; set; }
+        public virtual List<Meeting> Meetings { get; set; }
     }
 }
