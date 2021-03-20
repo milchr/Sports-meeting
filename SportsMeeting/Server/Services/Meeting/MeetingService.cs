@@ -18,6 +18,7 @@ namespace SportsMeeting.Server.Services
         private readonly IMapper _mapper;
         private readonly ILogger<MeetingService> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
+        private DateTime localDate = DateTime.Now;
 
         public MeetingService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<MeetingService> logger, IMapper mapper)
         {
@@ -39,7 +40,15 @@ namespace SportsMeeting.Server.Services
         public async Task<List<MeetingDto>> getAllMeetings()
         {
             var meetings = await _dbContext.Meetings.ToListAsync();
-            var meetingDto = _mapper.Map<List<MeetingDto>>(meetings);
+            List<Meeting> listOfAvailableMeetings = new List<Meeting>();
+            foreach (var meeting in meetings)
+            {
+                if(Convert.ToInt32((meeting.Date - localDate).TotalDays) >= 0)
+                {
+                    listOfAvailableMeetings.Add(meeting);
+                }
+            }
+            var meetingDto = _mapper.Map<List<MeetingDto>>(listOfAvailableMeetings);
             
             return meetingDto;
         }

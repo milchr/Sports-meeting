@@ -28,7 +28,14 @@
                     }
                 </div>
                 <div class="card-footer text-muted">
-                    <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
+                    @if (@Convert.ToInt32(((meeting.Date - localDate).TotalDays)) == 0)
+                    {
+                        <p>Spotkanie odbędzie się dzisiaj </p>
+                    }
+                    else
+                    {
+                        <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
+                    }
                 </div>
             </div>
             <br />
