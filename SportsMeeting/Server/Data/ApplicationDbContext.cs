@@ -41,8 +41,6 @@ namespace SportsMeeting.Server.Data
                 .WithOne(u => u.ApplicationUser)
                 .HasForeignKey(m => m.UserName)
                 .OnDelete(DeleteBehavior.Cascade);
-        }
-
-       
+        } 
     }
 }

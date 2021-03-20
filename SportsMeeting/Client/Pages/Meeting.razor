@@ -28,7 +28,7 @@
                     }
                 </div>
                 <div class="card-footer text-muted">
-                    2 days ago
+                    <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
                 </div>
             </div>
             <br />
@@ -42,6 +42,7 @@
 
 @code {
     private List<MeetingDto> dto = new List<MeetingDto>();
+    DateTime localDate { get; set; } = DateTime.Now;
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,7 +50,7 @@
     }
 
     private async Task EditHandler(MeetingDto dto)
-    { 
+    {
         _navigationManager.NavigateTo("meeting/edit/" + dto.Id);
     }
 }

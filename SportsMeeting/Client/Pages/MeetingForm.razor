@@ -20,7 +20,7 @@
                     <option value="football">Piłka nożna</option>
                     <option value="golf">Golf</option>
                     <option value="volleyball">Siatkówka</option>
-                </InputSelect>         
+                </InputSelect>
             </div>
             <div class="form-group">
                 <label for="personallimit">Limit</label>
@@ -29,6 +29,10 @@
             <div class="form-group">
                 <label for="place">Place</label>
                 <InputText id="place" @bind-Value="dto.Place" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="date">Data</label>
+                <InputDate id="date" @bind-Value="dateInputValue" class="form-control" />
             </div>
             <button type="submit">Dodaj spotkanie</button>
         </EditForm>
@@ -39,8 +43,10 @@
 </AuthorizeView>
 @code {
     private CreateMeetingDto dto = new CreateMeetingDto();
-    //private CreateCategoryDto category = new CreateCategoryDto();
+    DateTime dateInputValue { get; set; } = DateTime.Now;
+
     private async void HandleCreateMeeting() {
+        dto.Date = dateInputValue;
         HttpResponseMessage response = await http.PostAsJsonAsync("meeting/new_meeting", dto);
         _navigationManager.NavigateTo("/meeting");
     }
