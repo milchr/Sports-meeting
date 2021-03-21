@@ -50,7 +50,7 @@ namespace SportsMeeting.Server.Services
             return messageDto;
         }
 
-        public async Task updateMessage(MessageDto message, int id)
+        public async Task updateMessage(int id, MessageDto message)
         {
             var result = await _dbContext.Messages
                 .FirstOrDefaultAsync(e => e.Id == id);
