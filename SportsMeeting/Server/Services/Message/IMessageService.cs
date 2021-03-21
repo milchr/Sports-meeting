@@ -13,7 +13,7 @@ namespace SportsMeeting.Server.Services
         public Task<MessageDto> getMessage(int id);
         public Task createMessage(CreateMessageDto dto);
         public Task deleteMessage(int Id);
-        public Task updateMessage(MessageDto message, int id);
+        public Task updateMessage(int id, MessageDto message);
 
     }
 }
