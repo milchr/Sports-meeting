@@ -41,7 +41,7 @@ namespace SportsMeeting.Server.Controllers
         {
             string CurrentUser = User.Identity.Name;
             await _meetingService.createMeeting(dto, CurrentUser);
-            return Ok();
+            return StatusCode(201);
         }
 
         [HttpDelete("delete/{id}")]
@@ -59,10 +59,11 @@ namespace SportsMeeting.Server.Controllers
         }
 
         [HttpPost("edit")]
-        public async Task editMeeting([FromBody] MeetingDto dto)
+        public async Task<IActionResult> editMeeting([FromBody] MeetingDto dto)
         {
             var meetingId = dto.Id;
             await _meetingService.updateMeeting(meetingId, dto);
+            return Ok();
         }     
     }
 }
