@@ -7,10 +7,6 @@
     <Authorized Context="Auth">
         <EditForm Model="dto" OnSubmit="HandleCreateMeeting">
             <div class="form-group">
-                <label for="id">id</label>
-                <InputNumber id="id" @bind-Value="dto.UserId" class="form-control" />
-            </div>
-            <div class="form-group">
                 <label for="title">Title</label>
                 <InputText id="title" @bind-Value="dto.Title" class="form-control" />
             </div>
@@ -19,12 +15,24 @@
                 <InputText id="description" @bind-Value="dto.Description" class="form-control" />
             </div>
             <div class="form-group">
+                <InputSelect class="form-select" @bind-Value="dto.categoryName" aria-label="Default select example">
+                    <option selected>Wybierz kategorię</option>
+                    <option value="football">Piłka nożna</option>
+                    <option value="golf">Golf</option>
+                    <option value="volleyball">Siatkówka</option>
+                </InputSelect>
+            </div>
+            <div class="form-group">
                 <label for="personallimit">Limit</label>
                 <InputNumber id="personallimit" @bind-Value="dto.PersonalLimit" class="form-control" />
             </div>
             <div class="form-group">
                 <label for="place">Place</label>
                 <InputText id="place" @bind-Value="dto.Place" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="date">Data</label>
+                <InputDate id="date" @bind-Value="dateInputValue" class="form-control" />
             </div>
             <button type="submit">Dodaj spotkanie</button>
         </EditForm>
@@ -35,8 +43,10 @@
 </AuthorizeView>
 @code {
     private CreateMeetingDto dto = new CreateMeetingDto();
+    DateTime dateInputValue { get; set; } = DateTime.Now;
 
     private async void HandleCreateMeeting() {
+        dto.Date = dateInputValue;
         HttpResponseMessage response = await http.PostAsJsonAsync("meeting/new_meeting", dto);
         _navigationManager.NavigateTo("/meeting");
     }

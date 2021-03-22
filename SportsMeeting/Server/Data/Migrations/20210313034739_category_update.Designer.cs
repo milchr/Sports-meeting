@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsMeeting.Server.Data;
 
 namespace SportsMeeting.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210313034739_category_update")]
+    partial class category_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -288,6 +290,9 @@ namespace SportsMeeting.Server.Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<int?>("MeetingId")
+                        .HasColumnType("int");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -317,6 +322,8 @@ namespace SportsMeeting.Server.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MeetingId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -338,10 +345,16 @@ namespace SportsMeeting.Server.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MeetingId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MeetingId")
+                        .IsUnique();
 
                     b.ToTable("Category");
                 });
@@ -374,12 +387,6 @@ namespace SportsMeeting.Server.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -392,17 +399,7 @@ namespace SportsMeeting.Server.Data.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("UserName");
 
                     b.ToTable("Meetings");
                 });
@@ -516,6 +513,24 @@ namespace SportsMeeting.Server.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SportsMeeting.Server.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("SportsMeeting.Server.Models.Meeting", "Meeting")
+                        .WithMany()
+                        .HasForeignKey("MeetingId");
+
+                    b.Navigation("Meeting");
+                });
+
+            modelBuilder.Entity("SportsMeeting.Server.Models.Category", b =>
+                {
+                    b.HasOne("SportsMeeting.Server.Models.Meeting", null)
+                        .WithOne("Category")
+                        .HasForeignKey("SportsMeeting.Server.Models.Category", "MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SportsMeeting.Server.Models.Conversation", b =>
                 {
                     b.HasOne("SportsMeeting.Server.Models.Meeting", "Meeting")
@@ -525,22 +540,6 @@ namespace SportsMeeting.Server.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Meeting");
-                });
-
-            modelBuilder.Entity("SportsMeeting.Server.Models.Meeting", b =>
-                {
-                    b.HasOne("SportsMeeting.Server.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("SportsMeeting.Server.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Meetings")
-                        .HasForeignKey("UserName")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("SportsMeeting.Server.Models.Message", b =>
@@ -583,11 +582,6 @@ namespace SportsMeeting.Server.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SportsMeeting.Server.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Meetings");
-                });
-
             modelBuilder.Entity("SportsMeeting.Server.Models.Conversation", b =>
                 {
                     b.Navigation("Message");
@@ -597,6 +591,8 @@ namespace SportsMeeting.Server.Data.Migrations
 
             modelBuilder.Entity("SportsMeeting.Server.Models.Meeting", b =>
                 {
+                    b.Navigation("Category");
+
                     b.Navigation("Conversation");
 
                     b.Navigation("Participant");

@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace SportsMeeting.Shared.Dto
 {
-    public class MeetingDto
+    public class CreateMeetingDto
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int PersonalLimit { get; set; }
         public string Place { get; set; }
+        public DateTime Date { get; set; }
+        public string categoryName { get; set; }
     }
 }
+

@@ -1,0 +1,67 @@
+﻿@page "/meeting/edit/{id:int}"
+@inject NavigationManager _navigationManager
+@inject HttpClient http
+@using SportsMeeting.Shared.Dto
+<h3>MeetingForm</h3>
+<AuthorizeView Roles="User">
+    <Authorized Context="Auth">
+        <EditForm Model="meeting" OnSubmit="HandleDelete">
+            <button class="btn btn-danger btn-md active" type="submit">Usuń spotkanie</button>
+        </EditForm>
+        <EditForm Model="meeting" OnSubmit="HandleEditMeeting">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <InputText id="title" @bind-Value="meeting.Title" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <InputText id="description" @bind-Value="meeting.Description" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="personallimit">Limit</label>
+                <InputNumber id="personallimit" @bind-Value="meeting.PersonalLimit" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="place">Place</label>
+                <InputText id="place" @bind-Value="meeting.Place" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="date">Data</label>
+                <InputDate id="date" @bind-Value="meeting.Date" class="form-control" />
+            </div>
+            <button type="submit">Edytuj spotkanie</button>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <p>Nie masz uprawnień</p>
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    private List<MeetingDto> dto = new List<MeetingDto>();
+    private MeetingDto meeting = new MeetingDto();
+
+    [Parameter]
+    public int id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        dto = await http.GetFromJsonAsync<List<MeetingDto>>("meeting");
+        meeting = dto.FirstOrDefault(d => d.Id == id);
+    }
+
+    private async void HandleEditMeeting()
+    {
+
+        HttpResponseMessage response = await http.PostAsJsonAsync("meeting/edit", meeting);
+        _navigationManager.NavigateTo("/meeting");
+    }
+
+    private async void HandleDelete()
+    {
+        var id = meeting.Id;
+        HttpResponseMessage response = await http.DeleteAsync("meeting/delete/" + id);
+        _navigationManager.NavigateTo("/meeting");
+    }
+
+
+}
