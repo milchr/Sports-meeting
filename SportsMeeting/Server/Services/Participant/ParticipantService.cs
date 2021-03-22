@@ -36,6 +36,11 @@ namespace SportsMeeting.Server.Services
 
             return participantDto;
         }
+        public async Task<Participant> getParticipantByUserEmail(string userEmail)
+        {
+            var participant = await _dbContext.Participants.FirstOrDefaultAsync(p => p.UserEmail == userEmail);
+            return participant;
+        }
 
         public async Task<List<ParticipantDto>> getAllParticipants()
         {
@@ -64,7 +69,7 @@ namespace SportsMeeting.Server.Services
             if (result != null)
             {
                 result.ConversationId = participant.ConversationId;
-                result.UserId = participant.UserId;
+                result.UserEmail = participant.UserEmail;
 
                 _dbContext.Participants.Update(result);
                 await _dbContext.SaveChangesAsync();

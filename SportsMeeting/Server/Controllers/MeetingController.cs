@@ -63,6 +63,12 @@ namespace SportsMeeting.Server.Controllers
         {
             var meetingId = dto.Id;
             await _meetingService.updateMeeting(meetingId, dto);
-        }     
+        }
+
+        [HttpPost("room/{id}")]
+        public async Task joinMeeting([FromRoute] int id, [FromBody] string userName)
+        {
+            await _meetingService.joinMeeting(id, userName);
+        }
     }
 }

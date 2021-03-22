@@ -17,16 +17,15 @@ namespace SportsMeeting.Server.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly ILogger<MeetingService> _logger;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IParticipantService _participantService;
         private DateTime localDate = DateTime.Now;
 
-        public MeetingService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, ILogger<MeetingService> logger, IMapper mapper)
+        public MeetingService(ApplicationDbContext dbContext, ILogger<MeetingService> logger, IMapper mapper, IParticipantService participantService)
         {
             _dbContext = dbContext;
-            _userManager = userManager;
             _logger = logger;
             _mapper = mapper;
-            
+            _participantService = participantService;
         }
 
         public async Task<MeetingDto> getMeeting(int id)
@@ -91,6 +90,31 @@ namespace SportsMeeting.Server.Services
                 _dbContext.Meetings.Update(result);
                 await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task joinMeeting(int meetingId, string userName)
+        {
+          
+            var meeting = await _dbContext.Meetings.FirstOrDefaultAsync(m => m.Id == meetingId);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userName);
+            CreateParticipantDto participantDto = new CreateParticipantDto();
+            participantDto.ConversationId = null;
+            participantDto.UserId = user.Id;
+            participantDto.MeetingId = meeting.Id;
+            participantDto.UserEmail = user.Email;
+            await _participantService.createParticipant(participantDto);
+            var participant = await _participantService.getParticipantByUserEmail(user.Id);  
+            user.Participants.Add(participant);
+            meeting.Participants.Add(participant);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<ParticipantDto>> getAllMeetingParticipants(int id)
+        {
+            var meeting = await _dbContext.Meetings.FirstOrDefaultAsync(m => m.Id == id);
+            var participants = meeting.Participants;
+            var participantsDto = _mapper.Map<List<ParticipantDto>>(participants);
+            return participantsDto;
         }
     }
 }
