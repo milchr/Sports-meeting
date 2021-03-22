@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsMeeting.Server.Data;
 
 namespace SportsMeeting.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210321152919_participants_update_2")]
+    partial class participants_update_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -449,9 +451,6 @@ namespace SportsMeeting.Server.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -460,7 +459,7 @@ namespace SportsMeeting.Server.Data.Migrations
 
                     b.HasIndex("MeetingId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserEmail");
 
                     b.ToTable("Participants");
                 });
@@ -573,7 +572,7 @@ namespace SportsMeeting.Server.Data.Migrations
 
                     b.HasOne("SportsMeeting.Server.Models.ApplicationUser", "User")
                         .WithMany("Participants")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserEmail")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Conversation");

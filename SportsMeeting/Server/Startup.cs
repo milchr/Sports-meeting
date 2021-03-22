@@ -56,6 +56,7 @@ namespace SportsMeeting.Server
             services.AddScoped<DataSeeder>();
             services.AddTransient<IMeetingService, MeetingService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IParticipantService, ParticipantService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddAutoMapper(this.GetType().Assembly);
