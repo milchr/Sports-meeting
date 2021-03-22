@@ -59,7 +59,7 @@ namespace SportsMeeting.Server.Controllers
         }
 
         [HttpPost("edit")]
-        public async Task<IActionResult> editMeeting([FromBody] MeetingDto dto)
+        public async Task editMeeting([FromBody] MeetingDto dto)
         {
             var meetingId = dto.Id;
             await _meetingService.updateMeeting(meetingId, dto);
