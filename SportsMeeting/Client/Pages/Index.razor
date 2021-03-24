@@ -4,4 +4,99 @@
 
 Welcome to your new app.
 
+
+<section data-test-id="bubbles-desktop" class="bubbles--is-desktop" icon-outside="" data-v-6cd709c8="">
+    <div class="landing__categories" style="max-width:700px;" icon-outside="">
+        <div class="category-bubble" icon-inside="" icon-outside="">
+            <a href="/category/football" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside="">
+                <img src="css/Images/football.png" alt="Piłka nożna" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                    Piłka nożna
+                </h2>
+            </a>
+        </div><div class="category-bubble" icon-inside="" icon-outside="">
+            <a href="/category/basketball" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside="">
+                <img src="css/Images/basketball.png" alt="Koszykówka" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                    Koszykówka
+                </h2>
+            </a>
+        </div>
+    </div>
+</section>
+
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+<style>
+
+    /*
+        ikonka
+    */
+    .category-bubble-link .category-bubble-icon[icon-inside] {
+        -webkit-animation-delay: .2s;
+        animation-delay: .2s;
+        margin-top: 20px;
+        height: 50px;
+    }
+    /*
+        odstęp między kółkami
+    */
+    .landing__categories > .category-bubble[icon-outside] {
+        margin: 12.5px;
+    }
+    /*
+        miejsce na kółka
+    */
+    .landing__categories[icon-outside] {
+        max-width: 600px !important;
+        min-height: 140px;
+        justify-content: center;
+        flex-direction: row;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 auto;
+    }
+    /*
+        kolor wokół i kółko
+    */
+    .category-bubble-link[icon-inside] {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        background-color: #fff;
+        border-radius: 100%;
+        cursor: pointer;
+        border: none;
+        user-select: none;
+        box-shadow: 0 2px 17px 0 #07f7df;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        transition: .3s;
+        text-decoration: none;
+        color: #000;
+        font-weight: 300;
+    }
+    /*
+        wielkość kółka
+    */
+    .category-bubble[icon-inside] {
+        box-shadow: none;
+        border: none;
+        user-select: none;
+        height: 114.2px;
+        width: 114.2px;
+    }
+
+    /*
+        tytuł kategorii
+    */
+    h2 {
+        display: block;
+        font-size: 1.5em;
+        margin-block-start: 0.80em;
+        margin-block-end: 0.80em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+    }
+</style>
