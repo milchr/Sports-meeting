@@ -4,7 +4,6 @@
 
 Welcome to your new app.
 
-
 <section data-test-id="bubbles-desktop" class="bubbles--is-desktop" icon-outside="" data-v-6cd709c8="">
     <div class="landing__categories" style="max-width:700px;" icon-outside="">
         <div class="category-bubble" icon-inside="" icon-outside="">
@@ -23,8 +22,6 @@ Welcome to your new app.
     </div>
 </section>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
-
 <style>
 
     /*
@@ -35,7 +32,10 @@ Welcome to your new app.
         animation-delay: .2s;
         margin-top: 20px;
         height: 50px;
+        transition: width 1s, height 1s;
     }
+
+        
     /*
         odstęp między kółkami
     */
@@ -75,7 +75,15 @@ Welcome to your new app.
         text-decoration: none;
         color: #000;
         font-weight: 300;
+        transition: width 1s, height 1s;
     }
+        /*
+        zmiana podświetlenia przy najechaniu kursorem
+    */
+        .category-bubble-link[icon-inside]:hover {
+            box-shadow: 0 2px 17px 0 #ffff00;
+        }
+
     /*
         wielkość kółka
     */
@@ -85,7 +93,19 @@ Welcome to your new app.
         user-select: none;
         height: 114.2px;
         width: 114.2px;
+        transition: width 1s, height 1s;
     }
+    /*
+        powiększanie kółka i ikonki przy najechaniu kursorem
+    */
+        .category-bubble[icon-inside]:hover {
+            height: 130px;
+            width: 130px;
+        }
+            .category-bubble[icon-inside]:hover > .category-bubble-link .category-bubble-icon[icon-inside] {
+                margin-top: 30px;
+                height: 70px;
+            }
 
     /*
         tytuł kategorii
