@@ -1,7 +1,68 @@
 ﻿@page "/meeting/room/{id:int}"
+
+@using Microsoft.AspNetCore.SignalR.Client
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager _navigationManager
+
 <h3>MeetingRoom</h3>
+<AuthorizeView Roles="User, Admin">
+    <Authorized Context="Auth">
+        <EditForm Model="newChatMessage" OnValidSubmit="SendMessage">
+            <DataAnnotationsValidator />
+            @(newChatMessage.Name = Auth.User.Identity.Name)
+            <div class="form-group">
+                <label>Message</label>
+                <InputTextArea class="form-control" @bind-Value="newChatMessage.Message"></InputTextArea>
+
+            </div>
+            <button type="submit">Wyślij</button>
+        </EditForm>
+        <ul>
+            <Virtualize Items="Messages.OrderByDescending(m => m.Date).ToList()" Context="message">
+                <li>@message.Name : @message.Message </li>
+            </Virtualize>
+        </ul>
+    </Authorized>
+    <NotAuthorized>
+        Nie masz uprawnień
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     [Parameter]
     public int id { get; set; }
+
+    List<ChatMessage> Messages = new List<ChatMessage>();
+    HubConnection hubConnection;
+    ChatMessage newChatMessage = new ChatMessage();
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(_navigationManager.BaseUri + "hubs/Chathub")
+            .Build();
+
+        hubConnection.On<string, string>("SendMessage", (name, message) =>
+        {
+            var chatMessage = new ChatMessage() { Name = name, Message = message, Date = DateTime.Now };
+            Messages.Add(chatMessage);
+            StateHasChanged();
+        });
+        await hubConnection.StartAsync();
+    }
+
+    public class ChatMessage //zmiana na messagedto
+    {
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string Message { get; set; }
+        public DateTime Date { get; set; }
+    }
+
+    public async Task SendMessage()
+    {
+        await hubConnection.SendAsync("SendMessage", newChatMessage.Name, newChatMessage.Message);
+        newChatMessage.Message = "";
+    }
 }

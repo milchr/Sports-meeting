@@ -53,6 +53,14 @@ namespace SportsMeeting.Server.Data
                 .WithOne(p => p.User)
                 .HasForeignKey(p=>p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Meeting>()
+                .HasOne(m => m.Conversation)
+                .WithOne(c => c.Meeting)
+                .HasForeignKey<Conversation>(c => c.MeetingId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
         } 
     }
 }
