@@ -123,5 +123,29 @@ namespace SportsMeeting.Server.Services
             var participantsDto = _mapper.Map<List<ParticipantDto>>(participants);
             return participantsDto;
         }
+
+
+        public async Task<List<MeetingDto>> getAllMeetingsByParticipant(string userEmail)
+        {
+            //var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+           // var participant = _dbContext.Participants.Where(u => u.UserEmail == userEmail).ToList();
+            //var meetings = participant.FindAll(p => p.MeetingId);
+            //var meetings = await _dbContext.Meetings.Include(p => p.Participants).ToListAsync();
+            //var u = meetings.FindAll(m => m.Participants.Where(p => p.UserEmail.Equals(userEmail)).ToList();
+            List<Meeting> userMeetings = new List<Meeting>();
+            var meetings = _dbContext.Meetings.Include(p => p.Participants);
+            foreach (Meeting m in meetings)
+            {
+                foreach(Participant p in m.Participants)
+                {
+                    if(p.UserEmail == userEmail)
+                    {
+                        userMeetings.Add(m);
+                    }
+                }
+            }
+            var meetingsDto = _mapper.Map<List<MeetingDto>>(userMeetings);
+            return meetingsDto;
+        }
     }
 }

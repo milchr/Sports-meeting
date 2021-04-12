@@ -70,5 +70,12 @@ namespace SportsMeeting.Server.Controllers
         {
             await _meetingService.joinMeeting(id, userName);
         }
+
+        [HttpGet("user_meetings")]
+        public async Task<ActionResult<List<MeetingDto>>> getUserMeetings()
+        {
+            string userEmail = User.Identity.Name;
+            return Ok(await _meetingService.getAllMeetingsByParticipant(userEmail));
+        }
     }
 }
