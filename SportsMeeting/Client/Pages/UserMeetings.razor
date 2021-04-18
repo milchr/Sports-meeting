@@ -5,9 +5,7 @@
 <h3>Spotkania</h3>
 <AuthorizeView Roles="User, Admin">
     <Authorized Context="Auth">
-        <a class="btn btn-primary btn-md active" href="/new_meeting"> Zaplanuj nowe spotkanie</a>
         <h3>Twoje Spotkania</h3>
-
         @foreach (var meeting in dto)
         {
             <div class="card text-center">

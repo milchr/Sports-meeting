@@ -40,7 +40,7 @@ namespace SportsMeeting.Server.Services
 
         public async Task<List<MeetingDto>> getAllMeetings()
         {
-            var meetings = await _dbContext.Meetings.ToListAsync();
+            var meetings = await _dbContext.Meetings.Include(x=>x.Participants).ToListAsync();
             List<Meeting> listOfAvailableMeetings = new List<Meeting>();
             foreach (var meeting in meetings)
             {
@@ -50,7 +50,7 @@ namespace SportsMeeting.Server.Services
                 }
             }
             var meetingDto = _mapper.Map<List<MeetingDto>>(listOfAvailableMeetings);
-            
+
             return meetingDto;
         }
 
@@ -68,6 +68,18 @@ namespace SportsMeeting.Server.Services
             conversationDto.MeetingId = meeting.Id;
             conversationDto.Title = meeting.Title;
             await _conversationService.createConversation(conversationDto);
+
+            var conversation = await _dbContext.Conversations.FirstOrDefaultAsync(c => c.MeetingId == meeting.Id);
+            CreateParticipantDto participantDto = new CreateParticipantDto();
+            participantDto.ConversationId = conversation.Id;
+            participantDto.UserId = u.Id;
+            participantDto.MeetingId = meeting.Id;
+            participantDto.UserEmail = u.Email;
+            await _participantService.createParticipant(participantDto);
+            var participant = await _participantService.getParticipantByUserEmail(u.Email);
+            u.Participants.Add(participant);
+            meeting.Participants.Add(participant);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task deleteMeeting(int Id)
@@ -100,7 +112,6 @@ namespace SportsMeeting.Server.Services
 
         public async Task joinMeeting(int meetingId, string userName)
         {
-          
             var meeting = await _dbContext.Meetings.FirstOrDefaultAsync(m => m.Id == meetingId);
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userName);
             var conversation = await _dbContext.Conversations.FirstOrDefaultAsync(c => c.MeetingId == meeting.Id);
@@ -124,14 +135,8 @@ namespace SportsMeeting.Server.Services
             return participantsDto;
         }
 
-
         public async Task<List<MeetingDto>> getAllMeetingsByParticipant(string userEmail)
         {
-            //var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
-           // var participant = _dbContext.Participants.Where(u => u.UserEmail == userEmail).ToList();
-            //var meetings = participant.FindAll(p => p.MeetingId);
-            //var meetings = await _dbContext.Meetings.Include(p => p.Participants).ToListAsync();
-            //var u = meetings.FindAll(m => m.Participants.Where(p => p.UserEmail.Equals(userEmail)).ToList();
             List<Meeting> userMeetings = new List<Meeting>();
             var meetings = _dbContext.Meetings.Include(p => p.Participants);
             foreach (Meeting m in meetings)

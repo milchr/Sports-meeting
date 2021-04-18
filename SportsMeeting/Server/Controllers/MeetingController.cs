@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using SportsMeeting.Client.Pages;
 using System.Net.Http;
+using Microsoft.Extensions.Logging;
 
 namespace SportsMeeting.Server.Controllers
 {
@@ -17,11 +18,13 @@ namespace SportsMeeting.Server.Controllers
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingService _meetingService;
+        private readonly ILogger<MeetingController> _logger;
 
 
-        public MeetingController(IMeetingService meetingService)
+        public MeetingController(IMeetingService meetingService, ILogger<MeetingController> logger)
         {
             _meetingService = meetingService;
+            _logger = logger;
         }
 
         [HttpGet]

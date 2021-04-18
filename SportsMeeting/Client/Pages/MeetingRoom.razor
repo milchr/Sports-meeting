@@ -4,24 +4,25 @@
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager _navigationManager
 
-<h3>MeetingRoom</h3>
+<h3 class="t">MeetingRoom</h3>
 <AuthorizeView Roles="User, Admin">
     <Authorized Context="Auth">
-        <ul>
-            <Virtualize Items="Messages.OrderByDescending(m => m.Date).ToList()" Context="message">
-                <li>@message.Name : @message.Message </li>
-            </Virtualize>
-        </ul>
-        <EditForm Model="newChatMessage" OnValidSubmit="SendMessage">
-            <DataAnnotationsValidator />
-            @(newChatMessage.Name = Auth.User.Identity.Name)
-            <div class="form-group">
-                <label>Message</label>
-                <InputTextArea class="form-control" @bind-Value="newChatMessage.Message"></InputTextArea>
-
-            </div>
-            <button type="submit">Wyślij</button>
-        </EditForm>
+        <div class="chat">
+            <ul class="message">
+                <Virtualize Items="Messages.OrderByDescending(m => m.Date).ToList()" Context="message">
+                    <li >@message.Name : @message.Message </li>
+                </Virtualize>
+            </ul>
+        </div>
+            <EditForm Model="newChatMessage" OnValidSubmit="SendMessage">
+                <DataAnnotationsValidator />
+                @{newChatMessage.Name = Auth.User.Identity.Name;}
+                <div class="form-group">
+                    <InputTextArea class="form-control" @bind-Value="newChatMessage.Message" placeholder = "Wyślij wiadomość"></InputTextArea>
+                </div>
+                <button type="submit">Wyślij</button>
+            </EditForm>
+        
     </Authorized>
     <NotAuthorized>
         Nie masz uprawnień
