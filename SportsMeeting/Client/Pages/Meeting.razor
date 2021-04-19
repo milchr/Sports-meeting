@@ -9,60 +9,60 @@
         <h3>Lista Spotkań</h3>
         <div class="meeting-list">
             @foreach (var meeting in dto)
-             {
-            <div class="cards">
-                <div class="card text-center">
-                    <div class="card-header">
-                        @meeting.Title
-                        <div>
-                            @meeting.Category.Name
+            {
+                <div class="cards">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            @meeting.Title
+                            <div>
+                                @meeting.Category.Name
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@meeting.Description</h5>
+                            <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
+
+                            @if (meeting.Participants.Count < meeting.PersonalLimit)
+                            {
+                                if (meeting.Participants.Exists(p => p.UserEmail != Auth.User.Identity.Name))
+                                {
+                                    var userName = Auth.User.Identity.Name;
+                                    var joinMeeting = meeting;
+                                }
+                            }
+                            else
+                            {
+                                <button class="btn btn-primary btn-md disabled" type="submit">Brak miejsc</button>
+                            }
+
+                            @if (meeting.UserEmail == Auth.User.Identity.Name)
+                            {
+                                var editmeeting = meeting;
+                                <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
+                                    <button class="btn btn-primary btn-md active" type="submit">Edytuj</button>
+                                </EditForm>
+                            }
+                        </div>
+                        <div class="card-footer text-muted">
+                            @if (@Convert.ToInt32(((meeting.Date - localDate).TotalDays)) == 0)
+                            {
+                                <p>Spotkanie odbędzie się dzisiaj </p>
+                            }
+                            else
+                            {
+                                <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
+                            }
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">@meeting.Description</h5>
-                        <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
-
-                        @if (meeting.Participants.Count < meeting.PersonalLimit)
-                        {
-                            if (meeting.Participants.Exists(p => p.UserEmail != Auth.User.Identity.Name))
-                            {
-                                var userName = Auth.User.Identity.Name;
-                                var joinMeeting = meeting;
-                            }
-                        else
-                        {
-                            <button class="btn btn-primary btn-md disabled" type="submit">Brak miejsc</button>
-                        }
-
-                        @if (meeting.UserEmail == Auth.User.Identity.Name)
-                        {
-                            var editmeeting = meeting;
-                            <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
-                                <button class="btn btn-primary btn-md active" type="submit">Edytuj</button>
-                            </EditForm>
-                        }
-                    </div>
-                    <div class="card-footer text-muted">
-                        @if (@Convert.ToInt32(((meeting.Date - localDate).TotalDays)) == 0)
-                        {
-                            <p>Spotkanie odbędzie się dzisiaj </p>
-                        }
-                        else
-                        {
-                            <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
-                        }
-                    </div>
                 </div>
-            </div>
                 <br />
-             }
+            }
         </div>
     </Authorized>
     <NotAuthorized>
         Nie masz uprawnień
     </NotAuthorized>
 </AuthorizeView>
-
 
 @code {
     private List<MeetingDto> dto = new List<MeetingDto>();
