@@ -17,6 +17,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">@meeting.Description</h5>
+                    <p class="card-text">@meeting.CategoryName</p>
                     <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
                     @if (meeting.Participants.Count() < meeting.PersonalLimit)
                     {

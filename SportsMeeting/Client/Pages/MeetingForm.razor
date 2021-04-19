@@ -15,11 +15,15 @@
                 <InputText id="description" @bind-Value="dto.Description" class="form-control" />
             </div>
             <div class="form-group">
-                <InputSelect class="form-select" @bind-Value="dto.categoryName" aria-label="Default select example">
+                <InputSelect class="form-select" @bind-Value="dto.CategoryName" aria-label="Default select example">
                     <option selected>Wybierz kategorię</option>
                     <option value="football">Piłka nożna</option>
                     <option value="golf">Golf</option>
                     <option value="volleyball">Siatkówka</option>
+                    <option value="basketball">Koszykówka</option>
+                    <option value="biliard">Bilard</option>
+                    <option value="esport">E-Sport</option>
+                    <option value="other">Inne</option>
                 </InputSelect>
             </div>
             <div class="form-group">
@@ -44,6 +48,7 @@
 @code {
     private CreateMeetingDto dto = new CreateMeetingDto();
     DateTime dateInputValue { get; set; } = DateTime.Now;
+    public string categoryName;
 
     private async void HandleCreateMeeting() {
         dto.Date = dateInputValue;
