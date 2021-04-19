@@ -4,4 +4,163 @@
 
 Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<section data-test-id="bubbles-desktop" class="bubbles--is-desktop" icon-outside="">
+    <div class="landing__categories" style="max-width:700px;" icon-outside="">
+        <div class="category-bubble" icon-inside="" icon-outside="">
+            <a href="/category/football" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside="">
+                <img src="css/Images/football.png" alt="Football" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                    Piłka nożna
+                </h2>
+            </a>
+        </div>
+        <div class="category-bubble" icon-inside="" icon-outside="">
+            <a href="/category/basketball" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside="">
+                <img src="css/Images/basketball.png" alt="Basketball" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                    Koszykówka
+                </h2>
+            </a>
+        </div>
+        <div class="category-bubble" icon-inside="" icon-outside="">
+            <a href="/category/golf" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside="">
+                <img src="css/Images/golf.png" alt="Golf" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                    Golf
+                </h2>
+            </a>
+        </div>
+        <div class="category-bubble" icon-inside="" icon-outside="">
+            <a href="/category/biliard" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside="">
+                <img src="css/Images/billiard.png" alt="Biliard" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                    Bilard
+                </h2>
+            </a>
+        </div>
+        <div class="category-bubble" icon-inside="" icon-outside="">
+            <a href="/category/volleyball" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside="">
+                <img src="css/Images/volleyball.png" alt="Volleyball" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                    Siatkówka
+                </h2>
+            </a>
+        </div>
+        <div class="category-bubble" icon-inside="" icon-outside="">
+            <a href="/category/esport" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside="">
+                <img src="css/Images/esport.png" alt="E-Sport" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                    E-Sport
+                </h2>
+            </a>
+        </div>
+        <div class="category-bubble" icon-inside="" icon-outside="">
+            <a href="/category/other" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside="">
+                <img src="css/Images/other.png" alt="Other" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                    Inne
+                </h2>
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+
+    /*
+        ikonka
+    */
+    .category-bubble-link .category-bubble-icon[icon-inside] {
+        margin-top: 20px;
+        height: 50px;
+        transition: width 1s, height 1s;
+        border-radius: 30%;
+    }
+
+    @@keyframes spin {
+        100% {
+            margin-top: 20px;
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+
+        
+    /*
+        odstęp między kółkami
+    */
+    .landing__categories > .category-bubble[icon-outside] {
+        margin: 12.5px;
+    }
+    /*
+        miejsce na kółka
+    */
+    .landing__categories[icon-outside] {
+        max-width: 600px !important;
+        min-height: 140px;
+        justify-content: center;
+        flex-direction: row;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 auto;
+    }
+    /*
+        kolor wokół i kółko
+    */
+    .category-bubble-link[icon-inside] {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        background-color: transparent;
+        border-radius: 100%;
+        cursor: pointer;
+        border: none;
+        user-select: none;
+        box-shadow: 0 2px 17px 0 #07f7df;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        transition: .3s;
+        text-decoration: none;
+        color: #000;
+        font-weight: 300;
+        transition: width 1s, height 1s;
+    }
+        /*
+        zmiana podświetlenia przy najechaniu kursorem
+    */
+        .category-bubble-link[icon-inside]:hover {
+            box-shadow: 0 2px 17px 0 #ffff00;
+        }
+
+    /*
+        wielkość kółka
+    */
+    .category-bubble[icon-inside] {
+        box-shadow: none;
+        border: none;
+        user-select: none;
+        height: 114.2px;
+        width: 114.2px;
+        transition: width 1s, height 1s;
+    }
+    /*
+        powiększanie kółka i ikonki przy najechaniu kursorem
+    */
+        .category-bubble[icon-inside]:hover {
+            height: 130px;
+            width: 130px;
+        }
+            .category-bubble[icon-inside]:hover > .category-bubble-link .category-bubble-icon[icon-inside] {
+                margin-top: 30px;
+                height: 70px;
+                animation: spin 2s;
+            }
+
+    /*
+        tytuł kategorii
+    */
+    h2 {
+        display: block;
+        font-size: 1.5em;
+        margin-block-start: 0.7em;
+        margin-block-end: auto;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+    }
+</style>

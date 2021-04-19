@@ -63,7 +63,7 @@ namespace SportsMeeting.Server.Services
             CreateConversationDto conversationDto = new CreateConversationDto();
             meeting.UserName = u.Id;
             meeting.UserEmail = u.Email; 
-            meeting.Category = _dbContext.Category.FirstOrDefault(c => c.Name == dto.categoryName);
+            meeting.Category = _dbContext.Category.FirstOrDefault(c => c.Name == dto.CategoryName);
             await _dbContext.Meetings.AddAsync(meeting);
             u.Meetings.Add(meeting);          
             await _dbContext.SaveChangesAsync();

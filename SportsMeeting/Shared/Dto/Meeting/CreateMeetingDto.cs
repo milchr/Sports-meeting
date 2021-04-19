@@ -13,7 +13,7 @@ namespace SportsMeeting.Shared.Dto
         public int PersonalLimit { get; set; }
         public string Place { get; set; }
         public DateTime Date { get; set; }
-        public string categoryName { get; set; }
+        public string CategoryName { get; set; }
     }
 }
 
