@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SportsMeeting.Server.Data;
+using SportsMeeting.Server.Hubs;
 using SportsMeeting.Server.Models;
 using SportsMeeting.Server.Services;
 using System.IdentityModel.Tokens.Jwt;
@@ -29,6 +30,7 @@ namespace SportsMeeting.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddDbContext<ApplicationDbContext>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -93,6 +95,7 @@ namespace SportsMeeting.Server
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/hubs/chathub");
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");

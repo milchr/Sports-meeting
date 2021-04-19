@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using SportsMeeting.Client.Pages;
 using System.Net.Http;
+using Microsoft.Extensions.Logging;
 
 namespace SportsMeeting.Server.Controllers
 {
@@ -17,11 +18,13 @@ namespace SportsMeeting.Server.Controllers
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingService _meetingService;
+        private readonly ILogger<MeetingController> _logger;
 
 
-        public MeetingController(IMeetingService meetingService)
+        public MeetingController(IMeetingService meetingService, ILogger<MeetingController> logger)
         {
             _meetingService = meetingService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -69,6 +72,13 @@ namespace SportsMeeting.Server.Controllers
         public async Task joinMeeting([FromRoute] int id, [FromBody] string userName)
         {
             await _meetingService.joinMeeting(id, userName);
+        }
+
+        [HttpGet("user_meetings")]
+        public async Task<ActionResult<List<MeetingDto>>> getUserMeetings()
+        {
+            string userEmail = User.Identity.Name;
+            return Ok(await _meetingService.getAllMeetingsByParticipant(userEmail));
         }
     }
 }

@@ -58,9 +58,7 @@ namespace SportsMeeting.Server.Services
                 _dbContext.Participants.Remove(result);
                 await _dbContext.SaveChangesAsync();
             }
-
         }
-
         public async Task updateParticipant(int id, ParticipantDto participant)
         {
             var result = await _dbContext.Participants
