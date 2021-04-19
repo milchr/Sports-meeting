@@ -1,0 +1,80 @@
+﻿@page "/meeting/user_meetings"
+@inject NavigationManager _navigationManager
+@inject HttpClient http
+
+<h3>Spotkania</h3>
+<AuthorizeView Roles="User, Admin">
+    <Authorized Context="Auth">
+        <h3>Twoje Spotkania</h3>
+        @foreach (var meeting in dto)
+        {
+            <div class="card text-center">
+                <div class="card-header">
+                    @meeting.Title
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@meeting.Description</h5>
+                    <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
+                    @foreach (var participant in meeting.Participants)
+                    {
+                        @if (participant.UserEmail == Auth.User.Identity.Name)
+                        {
+                            <EditForm Model="meeting" OnSubmit="() => GoToMeetingHandler(meeting)">
+                                <button class="btn btn-primary btn-md active" type="submit">Przejdź do wydarzenia</button>
+                            </EditForm>
+                        }
+                    }
+                    @if (meeting.UserEmail == Auth.User.Identity.Name)
+                    {
+                        var editmeeting = meeting;
+                        <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
+                            <button class="btn btn-primary btn-md active" type="submit">Edytuj</button>
+                        </EditForm>
+                    }
+                </div>
+                <div class="card-footer text-muted">
+                    @if (@Convert.ToInt32(((meeting.Date - localDate).TotalDays)) == 0)
+                    {
+                        <p>Spotkanie odbędzie się dzisiaj </p>
+                    }
+                    else
+                    {
+                        <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
+                    }
+                </div>
+            </div>
+            <br />
+        }
+    </Authorized>
+    <NotAuthorized>
+        Nie masz uprawnień
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    private List<MeetingDto> dto = new List<MeetingDto>();
+    DateTime localDate { get; set; } = DateTime.Now;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dto = await http.GetFromJsonAsync<List<MeetingDto>>("meeting/user_meetings");
+    }
+
+    private async Task EditHandler(MeetingDto dto)
+    {
+        _navigationManager.NavigateTo("meeting/edit/" + dto.Id);
+    }
+
+    private async Task JoinHandler(MeetingDto dto, string userName)
+    {
+
+        HttpResponseMessage response = await http.PostAsJsonAsync("meeting/room/" + dto.Id, userName);
+        _navigationManager.NavigateTo("meeting/room/" + dto.Id);
+    }
+
+    private async Task GoToMeetingHandler(MeetingDto dto)
+    {
+        _navigationManager.NavigateTo("meeting/room/" + dto.Id);
+    }
+}

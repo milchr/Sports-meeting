@@ -12,7 +12,8 @@ namespace SportsMeeting.Server.Services
     {
         public MeetingMapper()
         {
-            CreateMap<Meeting, MeetingDto>();
+            CreateMap<Meeting, MeetingDto>()
+                .ForMember(p => p.Participants, opt => opt.MapFrom(src => src.Participants));
             CreateMap<CreateMeetingDto, Meeting>();
         }
     }

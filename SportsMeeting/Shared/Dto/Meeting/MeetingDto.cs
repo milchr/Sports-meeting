@@ -19,6 +19,7 @@ namespace SportsMeeting.Shared.Dto
         public string UserName { get; set; }
         public string UserEmail { get; set; }
         public List<ParticipantDto> Participants { get; set; }
+        public CategoryDto Category { get; set; }
 
     }
 }

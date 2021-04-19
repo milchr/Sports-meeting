@@ -14,6 +14,6 @@ namespace SportsMeeting.Server.Services
         public Task updateMeeting(int id, MeetingDto meeting);
         public Task<List<ParticipantDto>> getAllMeetingParticipants(int id);
         public Task joinMeeting(int meetingId, string userName);
-
+        public Task<List<MeetingDto>> getAllMeetingsByParticipant(string userEmail);
     }
 }
