@@ -59,8 +59,6 @@ namespace SportsMeeting.Server.Data
                 .WithOne(c => c.Meeting)
                 .HasForeignKey<Conversation>(c => c.MeetingId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-
         } 
     }
 }

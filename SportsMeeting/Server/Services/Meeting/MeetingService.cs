@@ -40,7 +40,9 @@ namespace SportsMeeting.Server.Services
 
         public async Task<List<MeetingDto>> getAllMeetings()
         {
-            var meetings = await _dbContext.Meetings.Include(x=>x.Participants).ToListAsync();
+            var meetings = await _dbContext.Meetings
+                                    .Include(x=>x.Participants)
+                                    .Include(x=>x.Category).ToListAsync();
             List<Meeting> listOfAvailableMeetings = new List<Meeting>();
             foreach (var meeting in meetings)
             {
