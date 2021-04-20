@@ -28,11 +28,19 @@
                                 {
                                     var userName = Auth.User.Identity.Name;
                                     var joinMeeting = meeting;
+
+                                    <EditForm Model="joinMeeting" OnSubmit="() => JoinHandler(joinMeeting, userName)">
+                                        <button class="btn btn-primary btn-md active" type="submit">Dołącz @meeting.Participants.Count /@meeting.PersonalLimit</button>
+                                    </EditForm>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary btn-md disabled" type="submit">Dołączyłeś</button>
                                 }
                             }
                             else
                             {
-                                <button class="btn btn-primary btn-md disabled" type="submit">Brak miejsc</button>
+                            <button class="btn btn-primary btn-md disabled" type="submit">Brak miejsc</button>
                             }
 
                             @if (meeting.UserEmail == Auth.User.Identity.Name)
