@@ -88,8 +88,11 @@ namespace SportsMeeting.Server.Services
         {
             var result = await _dbContext.Meetings
                 .FirstOrDefaultAsync(r => r.Id == Id);
-            if (result != null)
+            var result2 = await _dbContext.Participants
+                .FirstOrDefaultAsync(m => m.MeetingId == Id);
+            if (result != null & result2 != null)
             {
+                _dbContext.Participants.Remove(result2);
                 _dbContext.Meetings.Remove(result);
                 await _dbContext.SaveChangesAsync();
             }
