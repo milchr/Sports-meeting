@@ -1,0 +1,92 @@
+﻿@page "/category/volleyball"
+@inject NavigationManager _navigationManager
+@inject HttpClient http
+
+<AuthorizeView Roles="User, Admin">
+    <Authorized Context="Auth">
+        <h3>volleyball</h3>
+
+        @foreach (var meeting in dto)
+        {
+            @if (meeting.CategoryName == "volleyball")
+            {
+                <div class="card text-center">
+                    <div class="card-header">
+                        @meeting.Title
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@meeting.Description</h5>
+                        <p class="card-text">@meeting.CategoryName</p>
+                        <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
+                        @if (meeting.Participants.Count() < meeting.PersonalLimit)
+                        {
+                            var userName = Auth.User.Identity.Name;
+                            var joinMeeting = meeting;
+                            <EditForm Model="joinMeeting" OnSubmit="() => JoinHandler(joinMeeting, userName)">
+                                <button class="btn btn-primary btn-md active" type="submit">Dołącz @meeting.Participants.Count()/@meeting.PersonalLimit</button>
+                            </EditForm>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary btn-md disabled" type="submit">Brak miejsc</button>
+                        }
+
+                        @foreach (var participant in meeting.Participants)
+                        {
+                            @if (participant.UserEmail == Auth.User.Identity.Name)
+                            {
+
+                                <button class="btn btn-primary btn-md disabled" type="submit">Dołączyłeś</button>
+
+                            }
+                        }
+                        @if (meeting.UserEmail == Auth.User.Identity.Name)
+                        {
+                            var editmeeting = meeting;
+                            <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
+                                <button class="btn btn-primary btn-md active" type="submit">Edytuj</button>
+                            </EditForm>
+                        }
+                    </div>
+                    <div class="card-footer text-muted">
+                        @if (@Convert.ToInt32(((meeting.Date - localDate).TotalDays)) == 0)
+                        {
+                            <p>Spotkanie odbędzie się dzisiaj </p>
+                        }
+                        else
+                        {
+                            <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
+                        }
+                    </div>
+                </div>
+                <br />
+            }
+
+        }
+    </Authorized>
+    <NotAuthorized>
+        Nie masz uprawnień
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private List<MeetingDto> dto = new List<MeetingDto>();
+    DateTime localDate { get; set; } = DateTime.Now;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dto = await http.GetFromJsonAsync<List<MeetingDto>>("meeting");
+    }
+
+    private async Task EditHandler(MeetingDto dto)
+    {
+        _navigationManager.NavigateTo("meeting/edit/" + dto.Id);
+    }
+
+    private async Task JoinHandler(MeetingDto dto, string userName)
+    {
+
+        HttpResponseMessage response = await http.PostAsJsonAsync("meeting/room/" + dto.Id, userName);
+        _navigationManager.NavigateTo("meeting/room/" + dto.Id);
+    }
+}
