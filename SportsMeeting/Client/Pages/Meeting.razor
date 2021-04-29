@@ -1,96 +1,103 @@
 ﻿@page "/meeting"
 @inject NavigationManager _navigationManager
 @inject HttpClient http
-
-<h3>Spotkania</h3>
-<AuthorizeView Roles="User, Admin">
-    <Authorized Context="Auth">
-        <a class="btn btn-primary btn-md active" href="/new_meeting"> Zaplanuj nowe spotkanie</a>
-        <h3>Lista Spotkań</h3>
-        <div class="meeting-list">
-            @foreach (var meeting in dto)
-            {
-                <div class="cards">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            @meeting.Title
-                            <div>
-                                @meeting.Category.Name
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">@meeting.Description</h5>
-                            <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
-
-                            @if (meeting.Participants.Count < meeting.PersonalLimit)
+    <main role="main">
+        <AuthorizeView Roles="User, Admin">
+            <Authorized Context="Auth">
+                <section class="jumbotron text-center">
+                    <h3>Spotkania</h3>
+                    <a class="btn btn-primary btn-md active" href="/new_meeting"> Zaplanuj nowe spotkanie</a>
+                </section>
+                <h3>Dostępne spotkania</h3>
+                <div class="album py-5 bg-light">
+                    <div class="container">
+                        <div class="row">
+                            @foreach (var meeting in dto)
                             {
-                                if (meeting.Participants.Exists(p => p.UserEmail != Auth.User.Identity.Name))
-                                {
-                                    var userName = Auth.User.Identity.Name;
-                                    var joinMeeting = meeting;
-
-                                    <EditForm Model="joinMeeting" OnSubmit="() => JoinHandler(joinMeeting, userName)">
-                                        <button class="btn btn-primary btn-md active" type="submit">Dołącz @meeting.Participants.Count /@meeting.PersonalLimit</button>
-                                    </EditForm>
-                                }
-                                else
-                                {
-                                    <button class="btn btn-primary btn-md disabled" type="submit">Dołączyłeś</button>
-                                }
-                            }
-                            else
-                            {
-                            <button class="btn btn-primary btn-md disabled" type="submit">Brak miejsc</button>
-                            }
-
-                            @if (meeting.UserEmail == Auth.User.Identity.Name)
-                            {
-                                var editmeeting = meeting;
-                                <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
-                                    <button class="btn btn-primary btn-md active" type="submit">Edytuj</button>
-                                </EditForm>
-                            }
-                        </div>
-                        <div class="card-footer text-muted">
-                            @if (@Convert.ToInt32(((meeting.Date - localDate).TotalDays)) == 0)
-                            {
-                                <p>Spotkanie odbędzie się dzisiaj </p>
-                            }
-                            else
-                            {
-                                <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
+                                <div class="col-md-4">
+                                    <div class="card text-center mb-4 box-shadow">
+                                        <div class="card-header">
+                                            <h3>@meeting.Title</h3>
+                                            <div>
+                                                @meeting.Category.Name
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">@meeting.Description</h5>
+                                            <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="btn-group">
+                                                    @if (meeting.Participants.Count < meeting.PersonalLimit)
+                                                    {
+                                                        if (meeting.Participants.Exists(p => p.UserEmail != Auth.User.Identity.Name))
+                                                        {
+                                                            var userName = Auth.User.Identity.Name;
+                                                            var joinMeeting = meeting;
+                                                            <EditForm Model="joinMeeting" OnSubmit="() => JoinHandler(joinMeeting, userName)">
+                                                                <button class="btn btn-sm btn-outline-secondary" type="submit">Dołącz @meeting.Participants.Count /@meeting.PersonalLimit</button>
+                                                            </EditForm>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button class="btn btn-sm btn-outline-secondary disabled" type="submit">Dołączyłeś</button>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <button class="btn btn-sm btn-outline-secondary disabled" type="submit">Brak miejsc</button>
+                                                    }
+                                                    @if (meeting.UserEmail == Auth.User.Identity.Name)
+                                                    {
+                                                        var editmeeting = meeting;
+                                                        <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
+                                                            <button class="btn btn-sm btn-outline-secondary" type="submit">Edytuj</button>
+                                                        </EditForm>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer text-muted">
+                                            @if (@Convert.ToInt32(((meeting.Date - localDate).TotalDays)) == 0)
+                                            {
+                                                <p>Spotkanie odbędzie się dzisiaj </p>
+                                            }
+                                            else
+                                            {
+                                                <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
                             }
                         </div>
                     </div>
                 </div>
-                <br />
-            }
-        </div>
-    </Authorized>
-    <NotAuthorized>
-        Nie masz uprawnień
-    </NotAuthorized>
-</AuthorizeView>
+            </Authorized>
+            <NotAuthorized>
+                Nie masz uprawnień żeby zobaczyć tą stronę. Zaloguj się.
+            </NotAuthorized>
+        </AuthorizeView>
+    </main>
+    @code {
+        private List<MeetingDto> dto = new List<MeetingDto>();
+        DateTime localDate { get; set; } = DateTime.Now;
+        private int count = 0;
 
-@code {
-    private List<MeetingDto> dto = new List<MeetingDto>();
-    DateTime localDate { get; set; } = DateTime.Now;
-    private int count = 0;
+        protected override async Task OnInitializedAsync()
+        {
+            dto = await http.GetFromJsonAsync<List<MeetingDto>>("meeting");
+        }
 
-    protected override async Task OnInitializedAsync()
-    {
-        dto = await http.GetFromJsonAsync<List<MeetingDto>>("meeting");
+        private async Task EditHandler(MeetingDto dto)
+        {
+            _navigationManager.NavigateTo("meeting/edit/" + dto.Id);
+        }
+
+        private async Task JoinHandler(MeetingDto dto, string userName)
+        {
+
+            HttpResponseMessage response = await http.PostAsJsonAsync("meeting/room/" + dto.Id, userName);
+            _navigationManager.NavigateTo("meeting/room/" + dto.Id);
+        }
     }
-
-    private async Task EditHandler(MeetingDto dto)
-    {
-        _navigationManager.NavigateTo("meeting/edit/" + dto.Id);
-    }
-
-    private async Task JoinHandler(MeetingDto dto, string userName)
-    {
-
-        HttpResponseMessage response = await http.PostAsJsonAsync("meeting/room/" + dto.Id, userName);
-        _navigationManager.NavigateTo("meeting/room/" + dto.Id);
-    }
-}

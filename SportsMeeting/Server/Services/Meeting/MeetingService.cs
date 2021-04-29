@@ -142,9 +142,11 @@ namespace SportsMeeting.Server.Services
 
         public async Task<List<MeetingDto>> getAllMeetingsByParticipant(string userEmail)
         {
+            var meetings = await _dbContext.Meetings.Include(x => x.Participants)
+                                              .Include(x => x.Category)
+                                              .ToListAsync();
             List<Meeting> userMeetings = new List<Meeting>();
-            var meetings = _dbContext.Meetings.Include(p => p.Participants);
-            foreach (Meeting m in meetings)
+            foreach (var m in meetings)
             {
                 foreach(Participant p in m.Participants)
                 {

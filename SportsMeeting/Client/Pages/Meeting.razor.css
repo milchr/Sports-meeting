@@ -3,19 +3,3 @@
     margin: 0px auto;
     padding: 0px auto;
 }
-
-.meeting-list {
-    width: 75%;
-    align-items:center;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex: 200px
-}
-
-.cards {
-    margin-left : 7px;
-    margin-right : 7px;
-    margin-bottom : 7px;
-    
-}

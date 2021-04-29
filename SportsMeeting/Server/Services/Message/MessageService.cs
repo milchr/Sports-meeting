@@ -40,7 +40,6 @@ namespace SportsMeeting.Server.Services
                 _dbContext.Messages.Remove(result);
                 await _dbContext.SaveChangesAsync();
             }
-
         }
 
         public async Task<List<MessageDto>> getAllMessages()
@@ -62,9 +61,7 @@ namespace SportsMeeting.Server.Services
                 result.MessageText = message.MessageText;
                 _dbContext.Messages.Update(result);
                 await _dbContext.SaveChangesAsync();
-
             }
-
         }
 
         public async Task<MessageDto> getMessage(int id)
