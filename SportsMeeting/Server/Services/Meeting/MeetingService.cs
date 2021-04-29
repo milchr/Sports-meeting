@@ -89,7 +89,7 @@ namespace SportsMeeting.Server.Services
             var result = await _dbContext.Meetings
                 .FirstOrDefaultAsync(r => r.Id == Id);
             var result2 = await _dbContext.Participants
-                .FirstOrDefaultAsync(m => m.MeetingId == Id);
+                .FirstOrDefaultAsync(m => m.MeetingId == Id && m.ConversationId != 0);
             if (result != null & result2 != null)
             {
                 _dbContext.Participants.Remove(result2);
