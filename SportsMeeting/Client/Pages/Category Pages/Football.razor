@@ -1,14 +1,14 @@
-﻿@page "/category/golf"
+﻿@page "/category/football"
 @inject NavigationManager _navigationManager
 @inject HttpClient http
 
 <AuthorizeView Roles="User, Admin">
     <Authorized Context="Auth">
-        <h3>Golf</h3>
+        <h3>football</h3>
 
         @foreach (var meeting in dto)
         {
-            @if (meeting.CategoryName == "golf")
+            @if (meeting.CategoryName == "football")
             {
                 <div class="card text-center">
                     <div class="card-header">
