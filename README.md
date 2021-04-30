@@ -7,7 +7,7 @@
 * [Status](#status)
 
 ## General info
-
+Web application that allows you to organise sports events with people. 
 
 ## Technologies
 Project is created with:
