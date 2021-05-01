@@ -29,7 +29,7 @@
                                                 <div class="btn-group">
                                                     @if (meeting.Participants.Count < meeting.PersonalLimit)
                                                     {
-                                                        if (meeting.Participants.Exists(p => p.UserEmail != Auth.User.Identity.Name))
+                                                        @if (!meeting.Participants.Exists(p => p.UserEmail == Auth.User.Identity.Name))
                                                         {
                                                             var userName = Auth.User.Identity.Name;
                                                             var joinMeeting = meeting;

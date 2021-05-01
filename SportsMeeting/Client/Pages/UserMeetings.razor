@@ -24,14 +24,10 @@
                                         <div class="card-body">
                                             <h5 class="card-title">@meeting.Description</h5>
                                             <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
-                                            @foreach (var participant in meeting.Participants)
-                                            {
-                                                @if (participant.UserEmail == Auth.User.Identity.Name)
-                                                {
-                                                    <EditForm Model="meeting" OnSubmit="() => GoToMeetingHandler(meeting)">
-                                                        <button class="btn btn-primary btn-md active" type="submit">Przejdź do wydarzenia</button>
-                                                    </EditForm>
-                                                }
+                                            @if(meeting.Participants.Exists(p => p.UserEmail == Auth.User.Identity.Name)) { 
+                                                <EditForm Model="meeting" OnSubmit="() => GoToMeetingHandler(meeting)">
+                                                   <button class="btn btn-primary btn-md active" type="submit">Przejdź do wydarzenia</button>
+                                                </EditForm>
                                             }
                                             @if (meeting.UserEmail == Auth.User.Identity.Name)
                                             {
