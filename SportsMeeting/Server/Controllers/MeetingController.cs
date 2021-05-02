@@ -33,6 +33,12 @@ namespace SportsMeeting.Server.Controllers
             return Ok(await _meetingService.getAllMeetings());
         }
 
+        [HttpGet("filter")]
+        public async Task<ActionResult<List<MeetingDto>>> getMeetingsByCategory([FromQuery] string category)
+        {
+            return Ok(await _meetingService.getAllMeetingsByCategory(category));
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<MeetingDto>> getMeeting([FromRoute]int id)
         {

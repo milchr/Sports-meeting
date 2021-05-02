@@ -6,83 +6,147 @@
             <Authorized Context="Auth">
                 <section class="jumbotron text-center">
                     <h3>Spotkania</h3>
-                    <a class="btn btn-primary btn-md active" href="/new_meeting"> Zaplanuj nowe spotkanie</a>
-                </section>
-                <h3>Dostępne spotkania</h3>
-                <div class="album py-5 bg-light">
-                    <div class="container">
-                        <div class="row">
-                            @foreach (var meeting in dto)
-                            {
-                                <div class="col-md-4">
-                                    <div class="card text-center mb-4 box-shadow">
-                                        <div class="card-header">
-                                            <h3>@meeting.Title</h3>
-                                            <div>
-                                                @meeting.Category.Name
+                    <section data-test-id="bubbles-desktop" class="bubbles--is-desktop" icon-outside="">
+                        <div class="landing__categories" style="max-width:700px;" icon-outside="">
+                            <div class="category-bubble" icon-inside="" icon-outside="">
+                                <button type="button" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside=""
+                                        @onclick="@(() => Filter("football"))">
+                                    <img src="css/Images/football.png" alt="Football" data-test-id="category-img-url" class="category-bubble-icon" icon-inside="">
+                                    <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                                        Piłka nożna
+                                    </h2>
+                                </button>
+                            </div>
+                            <div class="category-bubble" icon-inside="" icon-outside="">
+                                <button type="button" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside=""
+                                        @onclick="@(() => Filter("basketball"))">
+                                    <img src="css/Images/basketball.png" alt="Basketball" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                                        Koszykówka
+                                    </h2>
+                                </button>
+                            </div>
+                            <div class="category-bubble" icon-inside="" icon-outside="">
+                                <button type="button" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside=""
+                                        @onclick="@(() => Filter("golf"))">
+                                    <img src="css/Images/golf.png" alt="Golf" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                                        Golf
+                                    </h2>
+                                </button>
+                            </div>
+                            <div class="category-bubble" icon-inside="" icon-outside="">
+                                <button type="button" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside=""
+                                        @onclick="@(() => Filter("billiard"))">
+                                    <img src="css/Images/billiard.png" alt="Biliard" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                                        Bilard
+                                    </h2>
+                                </button>
+                            </div>
+                            <div class="category-bubble" icon-inside="" icon-outside="">
+                                <button type="button" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside=""
+                                        @onclick="@(() => Filter("volleyball"))">
+                                    <img src="css/Images/volleyball.png" alt="Volleyball" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                                        Siatkówka
+                                    </h2>
+                                </button>
+                            </div>
+                            <div class="category-bubble" icon-inside="" icon-outside="">
+                                <button type="button" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside=""
+                                        @onclick="@(() => Filter("esport"))">
+                                    <img src="css/Images/esport.png" alt="E-Sport" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                                        E-Sport
+                                    </h2>
+                                </button>
+                            </div>
+                            <div class="category-bubble" icon-inside="" icon-outside="">
+                                <button type="button" data-test-id="category-bubble" class="category-bubble-link category-bubble-link" icon-inside=""
+                                        @onclick="@(() => Filter("other"))">
+                                    <img src="css/Images/other.png" alt="Other" data-test-id="category-img-url" class="category-bubble-icon" icon-inside=""> <h2 data-test-id="category-title" class="category-bubble-title" icon-inside="" style="font-size: 11px;">
+                                        Inne
+                                    </h2>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                            <br/>
+                            <a class="btn btn-primary btn-md active" href="/new_meeting"> Zaplanuj nowe spotkanie</a>
+                    </section>
+                    <h3>Dostępne spotkania</h3>
+                    <div class="album py-5 bg-light">
+                        <div class="container">
+                            <div class="row">
+                                @foreach (var meeting in dto)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="card text-center mb-4 box-shadow">
+                                            <div class="card-header">
+                                                <h3>@meeting.Title</h3>
+                                                <div>
+                                                    @meeting.Category.Name
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <h5 class="card-title">@meeting.Description</h5>
-                                            <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="btn-group">
-                                                    @if (meeting.Participants.Count < meeting.PersonalLimit)
-                                                    {
-                                                        @if (!meeting.Participants.Exists(p => p.UserEmail == Auth.User.Identity.Name))
+                                            <div class="card-body">
+                                                <h5 class="card-title">@meeting.Description</h5>
+                                                <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="btn-group">
+                                                        @if (meeting.Participants.Count < meeting.PersonalLimit)
                                                         {
-                                                            var userName = Auth.User.Identity.Name;
-                                                            var joinMeeting = meeting;
-                                                            <EditForm Model="joinMeeting" OnSubmit="() => JoinHandler(joinMeeting, userName)">
-                                                                <button class="btn btn-sm btn-outline-secondary" type="submit">Dołącz @meeting.Participants.Count /@meeting.PersonalLimit</button>
-                                                            </EditForm>
+                                                            @if (!meeting.Participants.Exists(p => p.UserEmail == Auth.User.Identity.Name))
+                                                            {
+                                                                var userName = Auth.User.Identity.Name;
+                                                                var joinMeeting = meeting;
+                                                                <EditForm Model="joinMeeting" OnSubmit="() => JoinHandler(joinMeeting, userName)">
+                                                                    <button class="btn btn-sm btn-outline-secondary" type="submit">Dołącz @meeting.Participants.Count /@meeting.PersonalLimit</button>
+                                                                </EditForm>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button class="btn btn-sm btn-outline-secondary disabled" type="submit">Dołączyłeś</button>
+                                                            }
                                                         }
                                                         else
                                                         {
-                                                            <button class="btn btn-sm btn-outline-secondary disabled" type="submit">Dołączyłeś</button>
+                                                            <button class="btn btn-sm btn-outline-secondary disabled" type="submit">Brak miejsc</button>
                                                         }
-                                                    }
-                                                    else
-                                                    {
-                                                        <button class="btn btn-sm btn-outline-secondary disabled" type="submit">Brak miejsc</button>
-                                                    }
-                                                    @if (meeting.UserEmail == Auth.User.Identity.Name)
-                                                    {
-                                                        var editmeeting = meeting;
-                                                        <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
-                                                            <button class="btn btn-sm btn-outline-secondary" type="submit">Edytuj</button>
-                                                        </EditForm>
-                                                    }
+                                                        @if (meeting.UserEmail == Auth.User.Identity.Name)
+                                                        {
+                                                            var editmeeting = meeting;
+                                                            <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
+                                                                <button class="btn btn-sm btn-outline-secondary" type="submit">Edytuj</button>
+                                                            </EditForm>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="card-footer text-muted">
-                                            @if (@Convert.ToInt32(((meeting.Date - localDate).TotalDays)) == 0)
-                                            {
-                                                <p>Spotkanie odbędzie się dzisiaj </p>
-                                            }
-                                            else
-                                            {
-                                                <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
-                                            }
+                                            <div class="card-footer text-muted">
+                                                @if (@Convert.ToInt32(((meeting.Date - localDate).TotalDays)) == 0)
+                                                {
+                                                    <p>Spotkanie odbędzie się dzisiaj </p>
+                                                }
+                                                else
+                                                {
+                                                    <p>Spotkanie za @Convert.ToInt32(((meeting.Date - localDate).TotalDays)) dni </p>
+                                                }
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <br />
-                            }
+                                    <br />
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
             </Authorized>
             <NotAuthorized>
                 Nie masz uprawnień żeby zobaczyć tą stronę. Zaloguj się.
             </NotAuthorized>
         </AuthorizeView>
     </main>
+    
     @code {
         private List<MeetingDto> dto = new List<MeetingDto>();
         DateTime localDate { get; set; } = DateTime.Now;
         private int count = 0;
+        private string CategoryFilter = string.Empty;
 
         protected override async Task OnInitializedAsync()
         {
@@ -99,5 +163,16 @@
 
             HttpResponseMessage response = await http.PostAsJsonAsync("meeting/room/" + dto.Id, userName);
             _navigationManager.NavigateTo("meeting/room/" + dto.Id);
+        }
+
+        private async Task LoadMeetings()
+        {
+            dto = await http.GetFromJsonAsync<List<MeetingDto>>($"meeting/filter?category={CategoryFilter}");
+        }
+
+        private async Task Filter(string categoryName)
+        {
+            CategoryFilter = categoryName;
+            await LoadMeetings();
         }
     }

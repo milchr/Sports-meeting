@@ -85,10 +85,51 @@ namespace SportsMeeting.Server.Data
                 _dbContext.Category.Add(category);
                 _dbContext.SaveChanges();
             }
+
             if (_dbContext.Category.FirstOrDefault(c => c.Name == "golf") == null)
             {
                 Category category = new Category();
                 category.Name = "golf";
+                _dbContext.Category.Add(category);
+                _dbContext.SaveChanges();
+            }
+
+            if (_dbContext.Category.FirstOrDefault(c => c.Name == "volleyball") == null)
+            {
+                Category category = new Category();
+                category.Name = "volleyball";
+                _dbContext.Category.Add(category);
+                _dbContext.SaveChanges();
+            }
+
+            if (_dbContext.Category.FirstOrDefault(c => c.Name == "esport") == null)
+            {
+                Category category = new Category();
+                category.Name = "esport";
+                _dbContext.Category.Add(category);
+                _dbContext.SaveChanges();
+            }
+
+            if (_dbContext.Category.FirstOrDefault(c => c.Name == "biliard") == null)
+            {
+                Category category = new Category();
+                category.Name = "biliard";
+                _dbContext.Category.Add(category);
+                _dbContext.SaveChanges();
+            }
+
+            if (_dbContext.Category.FirstOrDefault(c => c.Name == "other") == null)
+            {
+                Category category = new Category();
+                category.Name = "other";
+                _dbContext.Category.Add(category);
+                _dbContext.SaveChanges();
+            }
+
+            if (_dbContext.Category.FirstOrDefault(c => c.Name == "basketball") == null)
+            {
+                Category category = new Category();
+                category.Name = "basketball";
                 _dbContext.Category.Add(category);
                 _dbContext.SaveChanges();
             }

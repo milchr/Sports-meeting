@@ -159,5 +159,24 @@ namespace SportsMeeting.Server.Services
             var meetingsDto = _mapper.Map<List<MeetingDto>>(userMeetings);
             return meetingsDto;
         }
+
+        public async Task<List<MeetingDto>> getAllMeetingsByCategory(string category)
+        {
+            var meetings = await _dbContext.Meetings
+                                                .Where(m => m.CategoryName == category)
+                                                .Include(x => x.Participants)
+                                                .Include(x => x.Category)
+                                                .ToListAsync();
+            List<Meeting> meetingsByCategory = new List<Meeting>();
+            foreach (var m in meetings)
+            {
+                if (Convert.ToInt32((m.Date - localDate).TotalDays) >= 0)
+                {
+                   meetingsByCategory.Add(m);
+                }
+            }
+            var meetingsDto = _mapper.Map<List<MeetingDto>>(meetingsByCategory);
+            return meetingsDto;
+        }
     }
 }
