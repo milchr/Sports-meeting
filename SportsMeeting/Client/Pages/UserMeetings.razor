@@ -26,14 +26,14 @@
                                             <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
                                             @if(meeting.Participants.Exists(p => p.UserEmail == Auth.User.Identity.Name)) { 
                                                 <EditForm Model="meeting" OnSubmit="() => GoToMeetingHandler(meeting)">
-                                                   <button class="btn btn-primary btn-md active" type="submit">Przejdź do wydarzenia</button>
+                                                   <button class="btn btn-sm btn-outline-secondary" type="submit">Przejdź do wydarzenia</button>
                                                 </EditForm>
                                             }
                                             @if (meeting.UserEmail == Auth.User.Identity.Name)
                                             {
                                                 var editmeeting = meeting;
                                                 <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
-                                                    <button class="btn btn-primary btn-md active" type="submit">Edytuj</button>
+                                                    <button class="btn btn-sm btn-outline-secondary" type="submit">Edytuj</button>
                                                 </EditForm>
                                             }
                                         </div>

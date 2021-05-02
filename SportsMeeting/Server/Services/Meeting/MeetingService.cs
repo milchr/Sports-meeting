@@ -148,13 +148,13 @@ namespace SportsMeeting.Server.Services
             List<Meeting> userMeetings = new List<Meeting>();
             foreach (var m in meetings)
             {
-                foreach(Participant p in m.Participants)
-                {
-                    if(p.UserEmail == userEmail)
+                    if(m.Participants.Exists(p => p.UserEmail == userEmail))
                     {
-                        userMeetings.Add(m);
-                    }
-                }
+                        if (Convert.ToInt32((m.Date - localDate).TotalDays) >= 0)
+                        {
+                            userMeetings.Add(m);
+                        }
+                    }           
             }
             var meetingsDto = _mapper.Map<List<MeetingDto>>(userMeetings);
             return meetingsDto;
