@@ -36,7 +36,12 @@ namespace SportsMeeting.Server.Controllers
         [HttpGet("filter")]
         public async Task<ActionResult<List<MeetingDto>>> getMeetingsByCategory([FromQuery] string category)
         {
-            return Ok(await _meetingService.getAllMeetingsByCategory(category));
+            if (!string.IsNullOrEmpty(category))
+            {
+                return Ok(await _meetingService.getAllMeetingsByCategory(category));
+            }
+
+            return Ok(await _meetingService.getAllMeetings());
         }
 
         [HttpGet("{id}")]

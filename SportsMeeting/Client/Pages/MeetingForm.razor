@@ -5,14 +5,17 @@
 <h3>MeetingForm</h3>
 <AuthorizeView Roles="User">
     <Authorized Context="Auth">
-        <EditForm Model="dto" OnSubmit="HandleCreateMeeting">
+        <EditForm Model="@dto" OnValidSubmit="HandleCreateMeeting">
+            <DataAnnotationsValidator />
             <div class="form-group">
-                <label for="title">Title</label>
+                <label for="title">Tytuł</label>
                 <InputText id="title" @bind-Value="dto.Title" class="form-control" />
+                <ValidationMessage For="@(()=>dto.Title)"/>
             </div>
             <div class="form-group">
-                <label for="description">Description</label>
+                <label for="description">Opis spotkania</label>
                 <InputText id="description" @bind-Value="dto.Description" class="form-control" />
+                <ValidationMessage For="@(()=>dto.Description)" />
             </div>
             <div class="form-group">
                 <InputSelect class="form-select" @bind-Value="dto.CategoryName" aria-label="Default select example">
@@ -25,14 +28,17 @@
                     <option value="esport">E-Sport</option>
                     <option value="other">Inne</option>
                 </InputSelect>
+                <ValidationMessage For="@(()=>dto.CategoryName)" />
             </div>
             <div class="form-group">
-                <label for="personallimit">Limit</label>
+                <label for="personallimit">Limit osób</label>
                 <InputNumber id="personallimit" @bind-Value="dto.PersonalLimit" class="form-control" />
+                <ValidationMessage For="@(()=>dto.PersonalLimit)" />
             </div>
             <div class="form-group">
-                <label for="place">Place</label>
+                <label for="place">Miejsce spotkania</label>
                 <InputText id="place" @bind-Value="dto.Place" class="form-control" />
+                <ValidationMessage For="@(()=>dto.Place)" />
             </div>
             <div class="form-group">
                 <label for="date">Data</label>
@@ -48,7 +54,6 @@
 @code {
     private CreateMeetingDto dto = new CreateMeetingDto();
     DateTime dateInputValue { get; set; } = DateTime.Now;
-    public string categoryName;
 
     private async void HandleCreateMeeting() {
         dto.Date = dateInputValue;
