@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace SportsMeeting.Server.Services
 {
-    interface IApplicationUserService
+    public interface IApplicationUserService
     {
-        public Task<List<ApplicationUserDto>> getAllApplicationUsers();
-        public Task createApplicationUser(CreateApplicationUserDto dto);
+        public Task<ApplicationUserDto> getApplicationUser(string email);
     }
 }

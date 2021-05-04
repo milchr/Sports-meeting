@@ -12,6 +12,7 @@ using SportsMeeting.Server.Data;
 using SportsMeeting.Server.Hubs;
 using SportsMeeting.Server.Models;
 using SportsMeeting.Server.Services;
+using SportsMeeting.Server.Services.ApplicationUser;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 
@@ -61,6 +62,7 @@ namespace SportsMeeting.Server
             services.AddTransient<IParticipantService, ParticipantService>();
             services.AddTransient<IConversationService, ConversationService>();
             services.AddTransient<IMessageService, MessageService>();
+            services.AddTransient<IApplicationUserService, ApplicationUserService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddAutoMapper(this.GetType().Assembly);

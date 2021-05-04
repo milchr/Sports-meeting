@@ -3,11 +3,19 @@
 
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
+@inject HttpClient http
 
 <AuthorizeView>
     <Authorized>
-        <a href="authentication/profile">Witaj, @context.User.Identity.Name!</a>
-        <button class="nav-link btn btn-link" @onclick="BeginSignOut">Wyloguj się</button>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class='fas fa-user-circle'></i> &nbsp; @dto.FirstName &nbsp;
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="dropdown-item" type="button" @onclick="EditProfile">Edytuj profil</button>
+                <button class="dropdown-item" type="button" @onclick="BeginSignOut">Wyloguj się</button>
+            </div>
+        </div>
     </Authorized>
     <NotAuthorized>
         <a href="authentication/register">Zarejestruj się</a>
@@ -16,9 +24,25 @@
 </AuthorizeView>
 
 @code{
+    private ApplicationUserDto dto = new ApplicationUserDto();
+    private string userEmail = string.Empty;
+    private string temp = string.Empty;
+    private string firstname = string.Empty;
+
+
     private async Task BeginSignOut(MouseEventArgs args)
     {
         await SignOutManager.SetSignOutState();
         Navigation.NavigateTo("authentication/logout");
+    }
+
+    private async Task EditProfile(MouseEventArgs args)
+    {
+        Navigation.NavigateTo("authentication/profile");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        dto = await http.GetFromJsonAsync<ApplicationUserDto>("user");
     }
 }

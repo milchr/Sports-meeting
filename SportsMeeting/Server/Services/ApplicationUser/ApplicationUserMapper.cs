@@ -14,7 +14,7 @@ namespace SportsMeeting.Server.Services
         public ApplicationUserMapper()
         {
             CreateMap<IdentityUser, ApplicationUserDto>();
-            CreateMap<CreateApplicationUserDto, ApplicationUser>();
+            CreateMap<CreateApplicationUserDto, IdentityUser>();
         } 
     }
 }
