@@ -13,5 +13,7 @@ namespace SportsMeeting.Shared.Dto
         public string UserId { get; set; }
         public int MeetingId { get; set; }
         public string UserEmail { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
     }
 }

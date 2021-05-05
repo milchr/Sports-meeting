@@ -65,5 +65,11 @@ namespace SportsMeeting.Server.Controllers
             await _participantService.updateParticipant(participantId,dto);
             return Ok();
         }
+
+        [HttpGet("meeting/{id}")]
+        public async Task<ActionResult<List<ParticipantDto>>> getAllParticipantsByMeeting([FromRoute] int id)
+        {
+            return Ok(await _participantService.getParticipantsByMeeting(id));
+        }
     }
 }

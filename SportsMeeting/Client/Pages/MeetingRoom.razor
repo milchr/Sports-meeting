@@ -2,6 +2,7 @@
 
 @using Microsoft.AspNetCore.SignalR.Client
 @using System.ComponentModel.DataAnnotations
+
 @inject NavigationManager _navigationManager
 
 <h3 class="t">Meeting Room</h3>
@@ -32,6 +33,7 @@
                 <div class="d-flex flex-row justify-content-between p-3 adiv2 text-white"> <i class="fas fa-chevron-left"></i> <span class="pb-3">Czat na żywo</span> <i class="fas fa-times"></i> </div>
             </div>
         </div>
+        <MeetingRoomParticipantList @bind-meetingId="id" />  
     </Authorized>
     <NotAuthorized>
         Nie masz uprawnień
@@ -41,7 +43,7 @@
 @code {
     [Parameter]
     public int id { get; set; }
-
+   
     List<ChatMessage> Messages = new List<ChatMessage>();
     HubConnection hubConnection;
     ChatMessage newChatMessage = new ChatMessage();

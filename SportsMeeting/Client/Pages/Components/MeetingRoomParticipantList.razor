@@ -1,0 +1,30 @@
+﻿@namespace Components
+@inject HttpClient http
+<h3>Członkowie</h3>
+<div>
+    <ul class="list-group">
+        @foreach (var p in dto)
+        {
+            <li class="list-group-item">@p.UserEmail @p.FirstName @p.LastName</li>
+        }
+    </ul>
+</div>
+@code {
+    [Parameter]
+    public int meetingId { get; set; }
+    [Parameter]
+    public EventCallback<int> meetingIdChanged { get; set; }
+    
+    private List<ParticipantDto> dto = new List<ParticipantDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        dto = await http.GetFromJsonAsync<List<ParticipantDto>>("participant/meeting/" + meetingId);
+    }
+
+    private Task OnMeetingIdChanged(ChangeEventArgs e)
+    {
+        meetingId = int.Parse(e.Value.ToString());
+        return meetingIdChanged.InvokeAsync(meetingId);
+    }
+}

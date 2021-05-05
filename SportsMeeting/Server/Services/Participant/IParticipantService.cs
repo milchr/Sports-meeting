@@ -15,6 +15,6 @@ namespace SportsMeeting.Server.Services
         public Task deleteParticipant(int Id);
         public Task updateParticipant(int id, ParticipantDto participant);
         public Task<Participant> getParticipantByUserEmail(string userEmail);
-
+        public Task<List<ParticipantDto>> getParticipantsByMeeting(int meetingId);
     }
 }

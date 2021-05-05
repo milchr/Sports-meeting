@@ -73,5 +73,14 @@ namespace SportsMeeting.Server.Services
                 await _dbContext.SaveChangesAsync();
             }
         }
+
+        public async Task<List<ParticipantDto>> getParticipantsByMeeting(int meetingId)
+        {
+            var meeting = await _dbContext.Meetings
+                .Include(x => x.Participants)
+                .FirstOrDefaultAsync(m => m.Id == meetingId);
+            var participantDto = _mapper.Map<List<ParticipantDto>>(meeting.Participants);
+            return participantDto;
+        }
     }
 }
