@@ -19,9 +19,13 @@ namespace SportsMeeting.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApplicationUserDto>> getApplicationUser([FromQuery] string email)
+        public async Task<ActionResult<ApplicationUserDto>> getApplicationUser()
         {
-            return Ok(await _applicationUserService.getApplicationUser(User.Identity.Name));
+            if (User.Identity.IsAuthenticated)
+            {
+                return Ok(await _applicationUserService.getApplicationUser(User.Identity.Name));
+            }
+            return BadRequest();
         }
     }
 }
