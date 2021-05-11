@@ -28,20 +28,10 @@ namespace SportsMeeting.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MeetingDto>>> getMeetings()
+        public async Task<ActionResult<List<MeetingDto>>> getMeetings([FromQuery] MeetingQuery query)
         {
-            return Ok(await _meetingService.getAllMeetings());
-        }
-
-        [HttpGet("filter")]
-        public async Task<ActionResult<List<MeetingDto>>> getMeetingsByCategory([FromQuery] string category)
-        {
-            if (!string.IsNullOrEmpty(category))
-            {
-                return Ok(await _meetingService.getAllMeetingsByCategory(category));
-            }
-
-            return Ok(await _meetingService.getAllMeetings());
+            var meetings = await _meetingService.getAllMeetings(query);   
+            return Ok(meetings.Items);
         }
 
         [HttpGet("{id}")]

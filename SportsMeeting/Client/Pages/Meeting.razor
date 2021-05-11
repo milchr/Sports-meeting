@@ -149,6 +149,10 @@
                                 }
                             </div>
                         </div>
+                        <Pagination TotaPagesQuantity="TotalPageQuantity"
+                                    CurrentPage="CurrentPage" Radius="2"
+                                    SelectedPage="SelectedPage">
+                        </Pagination>
                     </div>
             </Authorized>
             <NotAuthorized>
@@ -161,11 +165,14 @@
         private List<MeetingDto> dto = new List<MeetingDto>();
         DateTime localDate { get; set; } = DateTime.Now;
         private int count = 0;
+        private int CurrentPage = 1;
+        private int Quantity = 9;
+        private int TotalPageQuantity;
         private string CategoryFilter = string.Empty;
 
         protected override async Task OnInitializedAsync()
         {
-            dto = await http.GetFromJsonAsync<List<MeetingDto>>("meeting");
+            dto = await http.GetFromJsonAsync<List<MeetingDto>>($"meeting?category={CategoryFilter}&page=1&quantity=9");
         }
 
         private async Task EditHandler(MeetingDto dto)
@@ -180,20 +187,26 @@
             _navigationManager.NavigateTo("meeting/room/" + dto.Id);
         }
 
-        private async Task LoadMeetings()
+        private async Task LoadMeetings(int page, int Quantity = 9)
         {
-            dto = await http.GetFromJsonAsync<List<MeetingDto>>($"meeting/filter?category={CategoryFilter}");
+            dto = await http.GetFromJsonAsync<List<MeetingDto>>($"meeting?category={CategoryFilter}&page={page}&quantity={Quantity}");
         }
 
         private async Task Filter(string categoryName)
         {
             CategoryFilter = categoryName;
-            await LoadMeetings();
+            await LoadMeetings(CurrentPage, Quantity);
         }
 
         private async Task ClearFilter()
         {
             CategoryFilter = string.Empty;;
-            await LoadMeetings();
+            await LoadMeetings(CurrentPage, Quantity);
+        }
+
+        private async Task SelectedPage(int page)
+        {
+            CurrentPage = page;
+            await LoadMeetings(page);
         }
     }

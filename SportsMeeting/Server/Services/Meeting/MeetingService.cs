@@ -38,22 +38,33 @@ namespace SportsMeeting.Server.Services
             return meetingDto;
         }
 
-        public async Task<List<MeetingDto>> getAllMeetings()
+        public async Task<PageResult<MeetingDto>> getAllMeetings(MeetingQuery query)
         {
-            var meetings = await _dbContext.Meetings
-                                    .Include(x=>x.Participants)
-                                    .Include(x=>x.Category).ToListAsync();
+            var meetingsQuery = await _dbContext.Meetings
+                                    .Include(x => x.Participants)
+                                    .Include(x => x.Category)
+                                    .Where(m => query.Category == null || (m.CategoryName.ToLower() == query.Category.ToLower())).ToListAsync();
+
             List<Meeting> listOfAvailableMeetings = new List<Meeting>();
-            foreach (var meeting in meetings)
+            foreach (var meeting in meetingsQuery)
             {
-                if(Convert.ToInt32((meeting.Date - localDate).TotalDays) >= 0)
+                if (Convert.ToInt32((meeting.Date - localDate).TotalDays) >= 0)
                 {
                     listOfAvailableMeetings.Add(meeting);
                 }
             }
-            var meetingDto = _mapper.Map<List<MeetingDto>>(listOfAvailableMeetings);
+            var totalItems = listOfAvailableMeetings.Count();
+            var meetings = listOfAvailableMeetings
+                                 .OrderBy(m => m.Date)
+                                 .Skip(query.Quantity * (query.Page - 1))
+                                 .Take(query.Quantity)
+                                 .ToList();
+                                 
+            var meetingDto = _mapper.Map<List<MeetingDto>>(meetings);
+            
+            var result = new PageResult<MeetingDto>(meetingDto, totalItems, query.Quantity, query.Page);
 
-            return meetingDto;
+            return result;
         }
 
         public async Task createMeeting(CreateMeetingDto dto, string user)
@@ -163,7 +174,7 @@ namespace SportsMeeting.Server.Services
         public async Task<List<MeetingDto>> getAllMeetingsByCategory(string category)
         {
             var meetings = await _dbContext.Meetings
-                                                .Where(m => m.CategoryName == category)
+                                                .Where(m => m.CategoryName.ToLower() == category.ToLower())
                                                 .Include(x => x.Participants)
                                                 .Include(x => x.Category)
                                                 .ToListAsync();
