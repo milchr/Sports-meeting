@@ -1,5 +1,5 @@
 ﻿.card {
-    width: 300px;
+    width: 100%;
     border: 2px;
     border-radius: 15px
 }
@@ -34,14 +34,14 @@ h3 {
     padding: 5px;
 }
 
-    .form-control:focus {
+.form-control:focus {
         box-shadow: none;
-    }
+}
 
-    .form-control::placeholder {
+.form-control::placeholder {
         font-size: 8px;
         color: #C4C4C4;
-    }
+}
 
 .space {
     padding: 5px;
@@ -53,8 +53,9 @@ h3 {
     border-radius: 12px;
 }
 
-    .btn btn-primary {
+.btn btn-primary {
         background-color: #271152 !important;
         padding: 5px;
         border-radius: 12px;
-    }
+}
+

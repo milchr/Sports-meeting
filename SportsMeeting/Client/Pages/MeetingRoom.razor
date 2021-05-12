@@ -3,37 +3,48 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using System.ComponentModel.DataAnnotations
 
+@inject HttpClient http
 @inject NavigationManager _navigationManager
 
-<h3 class="t">Meeting Room</h3>
+<h2>@meetingDto.Title</h2>
 <AuthorizeView Roles="User, Admin">
     <Authorized Context="Auth">
-        <div class="container d-flex justify-content-center">
-            <div class="card mt-5">
-                <div class="d-flex flex-row justify-content-between p-3 adiv text-white"> <i class="fas fa-chevron-left"></i> <span class="pb-3">Czat na żywo</span> <i class="fas fa-times"></i> </div>
-                <div class="d-flex flex-row p-3">
-                    <div class="message">
-                        <Virtualize Items="Messages.OrderBy(m => m.Date).ToList()" Context="message">
-                            <li>@message.Name : @message.Message </li>
-                        </Virtualize>
+        <div class="chat">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="container d-flex justify-content-center">
+                        <div class="card mt-5">
+                            <div class="d-flex flex-row justify-content-between p-3 adiv text-white">
+                                <i class="fas fa-chevron-left"></i> <span class="pb-3">Czat na żywo</span> <i class="fas fa-times"></i>
+                            </div>
+                            <div class="d-flex flex-row p-3">
+                            <div class="message">
+                                <Virtualize Items="Messages.OrderBy(m => m.Date).ToList()" Context="message">
+                                    <li>@message.Name : @message.Message </li>
+                                </Virtualize>
+                            </div>
+                        </div>
+                        <div class="form-group px-3">
+                            <EditForm Model="newChatMessage" OnValidSubmit="SendMessage">
+                                <DataAnnotationsValidator />
+                                @{newChatMessage.Name = $"{userDto.FirstName} {userDto.LastName}";}
+                                <InputTextArea class="form-control" @bind-Value="newChatMessage.Message" placeholder="Wpisz wiadomość"></InputTextArea>
+                                <div class="space">
+
+
+                                </div>
+                                <button class="btn btn-primary btn-md active" type="submit">Wyślij</button>
+                            </EditForm>
+                        </div>
+                        <div class="d-flex flex-row justify-content-between p-3 adiv2 text-white"> <i class="fas fa-chevron-left"></i> <span class="pb-3"></span></div>
                     </div>
                 </div>
-                <div class="form-group px-3">
-                    <EditForm Model="newChatMessage" OnValidSubmit="SendMessage">
-                        <DataAnnotationsValidator />
-                        @{newChatMessage.Name = Auth.User.Identity.Name;}
-                        <InputTextArea class="form-control" @bind-Value="newChatMessage.Message" placeholder="Wpisz wiadomość"></InputTextArea>
-                        <div class="space">
-
-
-                        </div>
-                        <button class="btn btn-primary btn-md active" type="submit">Wyślij</button>
-                    </EditForm>
                 </div>
-                <div class="d-flex flex-row justify-content-between p-3 adiv2 text-white"> <i class="fas fa-chevron-left"></i> <span class="pb-3">Czat na żywo</span> <i class="fas fa-times"></i> </div>
+                <div class="col-md-4">
+                <MeetingRoomParticipantList @bind-meetingId="id" />
+                </div>
             </div>
         </div>
-        <MeetingRoomParticipantList @bind-meetingId="id" />  
     </Authorized>
     <NotAuthorized>
         Nie masz uprawnień
@@ -43,16 +54,21 @@
 @code {
     [Parameter]
     public int id { get; set; }
-   
+
+    private ApplicationUserDto userDto = new ApplicationUserDto();
+    private MeetingDto meetingDto = new MeetingDto();
     List<ChatMessage> Messages = new List<ChatMessage>();
     HubConnection hubConnection;
     ChatMessage newChatMessage = new ChatMessage();
 
     protected override async Task OnInitializedAsync()
     {
+        userDto = await http.GetFromJsonAsync<ApplicationUserDto>("user");
+        meetingDto = await http.GetFromJsonAsync<MeetingDto>("meeting/" + id);
+
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(_navigationManager.BaseUri + "hubs/Chathub")
-            .Build();
+        .WithUrl(_navigationManager.BaseUri + "hubs/Chathub")
+        .Build();
 
         hubConnection.On<string, string>("SendMessage", (name, message) =>
         {

@@ -1,11 +1,11 @@
 ﻿@namespace Components
 @inject HttpClient http
-<h3>Członkowie</h3>
+<h5>Członkowie</h5>
 <div>
     <ul class="list-group">
         @foreach (var p in dto)
         {
-            <li class="list-group-item">@p.UserEmail @p.FirstName @p.LastName</li>
+            <li class="list-group-item">@p.FirstName @p.LastName</li>
         }
     </ul>
 </div>

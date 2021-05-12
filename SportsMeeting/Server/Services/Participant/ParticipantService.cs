@@ -78,9 +78,23 @@ namespace SportsMeeting.Server.Services
         {
             var meeting = await _dbContext.Meetings
                 .Include(x => x.Participants)
+                .Include(x => x.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == meetingId);
-            var participantDto = _mapper.Map<List<ParticipantDto>>(meeting.Participants);
-            return participantDto;
+            List<ParticipantDto> participants = new List<ParticipantDto>();
+            foreach(var p in meeting.Participants)
+            {
+                ParticipantDto participantDto = new ParticipantDto();
+                participantDto.Id = p.Id;
+                participantDto.ConversationId = p.ConversationId;
+                participantDto.UserId = p.UserId;
+                participantDto.MeetingId = p.MeetingId;
+                participantDto.UserEmail = p.UserEmail;
+                participantDto.FirstName = p.User.FirstName;
+                participantDto.LastName = p.User.LastName;
+
+                participants.Add(participantDto);
+            }
+            return participants;
         }
     }
 }
