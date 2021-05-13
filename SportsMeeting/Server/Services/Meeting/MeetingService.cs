@@ -104,15 +104,30 @@ namespace SportsMeeting.Server.Services
 
         public async Task deleteMeeting(int Id)
         {
-            var result = await _dbContext.Meetings
-                .FirstOrDefaultAsync(r => r.Id == Id);
-            var result2 = await _dbContext.Participants
-                .FirstOrDefaultAsync(m => m.MeetingId == Id && m.ConversationId != 0);
-            if (result != null & result2 != null)
+            var meeting = await _dbContext.Meetings
+                .FirstOrDefaultAsync(m => m.Id == Id);
+                
+            if (meeting is null)
             {
-                _dbContext.Participants.Remove(result2);
-                _dbContext.Meetings.Remove(result);
-                await _dbContext.SaveChangesAsync();
+                throw new NotFoundException("Meeting not found");
+            }
+
+            var participants = await _dbContext.Participants
+                .Include(x=>x.Meeting)
+                .Where(p => p.MeetingId == Id).ToListAsync();
+
+            var conversation = await _dbContext.Conversations
+                .FirstOrDefaultAsync(c => c.MeetingId == Id);
+
+            if (participants != null && conversation != null)
+            {
+               _dbContext.Conversations.Remove(conversation);
+                foreach(var participant in participants)
+                {
+                    _dbContext.Participants.Remove(participant);
+                }
+               _dbContext.Meetings.Remove(meeting);
+               await _dbContext.SaveChangesAsync();
             }
         }
 
@@ -121,13 +136,17 @@ namespace SportsMeeting.Server.Services
             var result = await _dbContext.Meetings
                .FirstOrDefaultAsync(r => r.Id == id);
 
+            if (result is null)
+            {
+                throw new NotFoundException("Meeting not found");
+            }
+
             if (result != null)
             {
                 result.Title = meeting.Title;
                 result.Description = meeting.Description;
                 result.Place = meeting.Place;
                 result.PersonalLimit = meeting.PersonalLimit;
-
                 _dbContext.Meetings.Update(result);
                 await _dbContext.SaveChangesAsync();
             }
@@ -136,6 +155,12 @@ namespace SportsMeeting.Server.Services
         public async Task joinMeeting(int meetingId, string userName)
         {
             var meeting = await _dbContext.Meetings.FirstOrDefaultAsync(m => m.Id == meetingId);
+
+            if (meeting is null)
+            {
+                throw new NotFoundException("Meeting not found");
+            }
+
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userName);
             var conversation = await _dbContext.Conversations.FirstOrDefaultAsync(c => c.MeetingId == meeting.Id);
             CreateParticipantDto participantDto = new CreateParticipantDto();

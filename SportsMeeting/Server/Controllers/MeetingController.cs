@@ -37,7 +37,13 @@ namespace SportsMeeting.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MeetingDto>> getMeeting([FromRoute]int id)
         {
-            return Ok(await _meetingService.getMeeting(id));
+            var meeting = await _meetingService.getMeeting(id);
+
+            if(meeting is null)
+            {
+                return NotFound(meeting);
+            }
+            return Ok(meeting);
         }
 
         [HttpPost("new_meeting")]

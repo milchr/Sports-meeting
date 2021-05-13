@@ -1,5 +1,6 @@
 ﻿@namespace Components
 @inject HttpClient http
+@inject NavigationManager _navigationManager
 <h5>Członkowie</h5>
 <div>
     <ul class="list-group">
@@ -14,7 +15,7 @@
     public int meetingId { get; set; }
     [Parameter]
     public EventCallback<int> meetingIdChanged { get; set; }
-    
+
     private List<ParticipantDto> dto = new List<ParticipantDto>();
 
     protected override async Task OnInitializedAsync()

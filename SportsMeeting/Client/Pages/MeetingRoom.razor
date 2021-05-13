@@ -64,8 +64,17 @@
     protected override async Task OnInitializedAsync()
     {
         userDto = await http.GetFromJsonAsync<ApplicationUserDto>("user");
-        meetingDto = await http.GetFromJsonAsync<MeetingDto>("meeting/" + id);
-
+     
+        HttpResponseMessage response = await http.GetAsync("meeting/" + id);
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            string meeting = await response.Content.ReadAsStringAsync();
+            meetingDto = System.Text.Json.JsonSerializer.Deserialize<MeetingDto>(meeting);
+        }
+        else
+        {
+            _navigationManager.NavigateTo("/error");
+        }
         hubConnection = new HubConnectionBuilder()
         .WithUrl(_navigationManager.BaseUri + "hubs/Chathub")
         .Build();
