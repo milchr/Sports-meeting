@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SportsMeeting.Server.Data;
+using SportsMeeting.Server.Exceptions;
 using SportsMeeting.Server.Models;
 using SportsMeeting.Shared.Dto;
 using System;
@@ -33,6 +34,12 @@ namespace SportsMeeting.Server.Services
         public async Task<MeetingDto> getMeeting(int id)
         {
             var meeting = await _dbContext.Meetings.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (meeting is null)
+            {
+                throw new NotFoundException("Meeting not found");
+            }
+
             var meetingDto = _mapper.Map<MeetingDto>(meeting);
 
             return meetingDto;
@@ -146,6 +153,12 @@ namespace SportsMeeting.Server.Services
         public async Task<List<ParticipantDto>> getAllMeetingParticipants(int id)
         {
             var meeting = await _dbContext.Meetings.FirstOrDefaultAsync(m => m.Id == id);
+            
+            if (meeting is null)
+            {
+                throw new NotFoundException("Meeting not found");
+            }
+
             var participants = meeting.Participants;
             var participantsDto = _mapper.Map<List<ParticipantDto>>(participants);
             return participantsDto;
@@ -156,7 +169,14 @@ namespace SportsMeeting.Server.Services
             var meetings = await _dbContext.Meetings.Include(x => x.Participants)
                                               .Include(x => x.Category)
                                               .ToListAsync();
+
+            if (meetings is null)
+            {
+                throw new NotFoundException("Meetings not found");
+            }
+
             List<Meeting> userMeetings = new List<Meeting>();
+
             foreach (var m in meetings)
             {
                     if(m.Participants.Exists(p => p.UserEmail == userEmail))
@@ -178,7 +198,13 @@ namespace SportsMeeting.Server.Services
                                                 .Include(x => x.Participants)
                                                 .Include(x => x.Category)
                                                 .ToListAsync();
+            if (meetings is null)
+            {
+                throw new NotFoundException("Meetings not found");
+            }
+
             List<Meeting> meetingsByCategory = new List<Meeting>();
+
             foreach (var m in meetings)
             {
                 if (Convert.ToInt32((m.Date - localDate).TotalDays) >= 0)

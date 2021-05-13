@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SportsMeeting.Server.Data;
+using SportsMeeting.Server.Exceptions;
 using SportsMeeting.Server.Models;
 using SportsMeeting.Shared.Dto;
 using System.Collections.Generic;
@@ -80,7 +81,14 @@ namespace SportsMeeting.Server.Services
                 .Include(x => x.Participants)
                 .Include(x => x.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == meetingId);
+
+            if(meeting is null)
+            {
+                throw new NotFoundException("Meeting not found");
+            }
+
             List<ParticipantDto> participants = new List<ParticipantDto>();
+
             foreach(var p in meeting.Participants)
             {
                 ParticipantDto participantDto = new ParticipantDto();

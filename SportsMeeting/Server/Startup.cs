@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SportsMeeting.Server.Data;
 using SportsMeeting.Server.Hubs;
+using SportsMeeting.Server.Middleware;
 using SportsMeeting.Server.Models;
 using SportsMeeting.Server.Services;
 using SportsMeeting.Server.Services.ApplicationUser;
@@ -63,6 +64,7 @@ namespace SportsMeeting.Server
             services.AddTransient<IConversationService, ConversationService>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
+            services.AddScoped<ErrorHandler>();
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddAutoMapper(this.GetType().Assembly);
@@ -84,7 +86,7 @@ namespace SportsMeeting.Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseMiddleware<ErrorHandler>();
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
