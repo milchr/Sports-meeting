@@ -1,20 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SportsMeeting.Server.Services;
 using SportsMeeting.Shared.Dto;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using SportsMeeting.Client.Pages;
-using System.Net.Http;
 using Microsoft.Extensions.Logging;
 
 namespace SportsMeeting.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]  
+    [Route("[controller]")]
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingService _meetingService;
@@ -66,6 +60,18 @@ namespace SportsMeeting.Server.Controllers
         {
             await _meetingService.updateMeeting(id, dto);
             return Ok();
+        }
+
+        [HttpGet("edit/{id}")]
+        public async Task<ActionResult<MeetingDto>> getMeetingToEdit([FromRoute] int id)
+        {
+            var meeting = await _meetingService.getMeeting(id);
+
+            if (meeting is null)
+            {
+                return NotFound(meeting);
+            }
+            return Ok(meeting);
         }
 
         [HttpPost("edit")]

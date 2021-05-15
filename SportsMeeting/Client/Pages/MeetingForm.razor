@@ -1,63 +1,69 @@
 ﻿@page "/new_meeting"
 @inject NavigationManager _navigationManager
 @inject HttpClient http
-@using SportsMeeting.Shared.Dto
-<h3>MeetingForm</h3>
-<AuthorizeView Roles="User">
-    <Authorized Context="Auth">
-        <EditForm Model="@dto" OnValidSubmit="HandleCreateMeeting">
-            <DataAnnotationsValidator />
-            <div class="form-group">
-                <label for="title">Tytuł</label>
-                <InputText id="title" @bind-Value="dto.Title" class="form-control" />
-                <ValidationMessage For="@(()=>dto.Title)"/>
-            </div>
-            <div class="form-group">
-                <label for="description">Opis spotkania</label>
-                <InputText id="description" @bind-Value="dto.Description" class="form-control" />
-                <ValidationMessage For="@(()=>dto.Description)" />
-            </div>
-            <div class="form-group">
-                <InputSelect class="form-select" @bind-Value="dto.CategoryName" aria-label="Default select example">
-                    <option selected>Wybierz kategorię</option>
-                    <option value="football">Piłka nożna</option>
-                    <option value="golf">Golf</option>
-                    <option value="volleyball">Siatkówka</option>
-                    <option value="basketball">Koszykówka</option>
-                    <option value="biliard">Bilard</option>
-                    <option value="esport">E-Sport</option>
-                    <option value="other">Inne</option>
-                </InputSelect>
-                <ValidationMessage For="@(()=>dto.CategoryName)" />
-            </div>
-            <div class="form-group">
-                <label for="personallimit">Limit osób</label>
-                <InputNumber id="personallimit" @bind-Value="dto.PersonalLimit" class="form-control" />
-                <ValidationMessage For="@(()=>dto.PersonalLimit)" />
-            </div>
-            <div class="form-group">
-                <label for="place">Miejsce spotkania</label>
-                <InputText id="place" @bind-Value="dto.Place" class="form-control" />
-                <ValidationMessage For="@(()=>dto.Place)" />
-            </div>
-            <div class="form-group">
-                <label for="date">Data</label>
-                <InputDate id="date" @bind-Value="dateInputValue" class="form-control" />
-            </div>
-            <button type="submit">Dodaj spotkanie</button>
-        </EditForm>
-    </Authorized>
-    <NotAuthorized>
-        <p>Nie masz uprawnień</p>
-    </NotAuthorized>
-</AuthorizeView>
-@code {
-    private CreateMeetingDto dto = new CreateMeetingDto();
-    DateTime dateInputValue { get; set; } = DateTime.Now;
 
-    private async void HandleCreateMeeting() {
-        dto.Date = dateInputValue;
-        HttpResponseMessage response = await http.PostAsJsonAsync("meeting/new_meeting", dto);
-        _navigationManager.NavigateTo("/meeting");
+<section class="jumbotron text-center">
+    <h3>Stwórz spotkanie</h3>
+</section>
+<div class="container">
+    <AuthorizeView Roles="User">
+        <Authorized Context="Auth">
+
+            <EditForm Model="@dto" OnValidSubmit="HandleCreateMeeting">
+                <DataAnnotationsValidator />
+                <div class="form-group">
+                    <label for="title">Tytuł</label>
+                    <InputText id="title" @bind-Value="dto.Title" class="form-control" />
+                    <ValidationMessage For="@(()=>dto.Title)" />
+                </div>
+                <div class="form-group">
+                    <label for="description">Opis spotkania</label>
+                    <InputText id="description" @bind-Value="dto.Description" class="form-control" />
+                    <ValidationMessage For="@(()=>dto.Description)" />
+                </div>
+                <div class="form-group">
+                    <InputSelect class="custom-select d-block w-25" @bind-Value="dto.CategoryName" aria-label="Default select example">
+                        <option selected>Wybierz kategorię</option>
+                        <option value="football">Piłka nożna</option>
+                        <option value="golf">Golf</option>
+                        <option value="volleyball">Siatkówka</option>
+                        <option value="basketball">Koszykówka</option>
+                        <option value="biliard">Bilard</option>
+                        <option value="esport">E-Sport</option>
+                        <option value="other">Inne</option>
+                    </InputSelect>
+                    <ValidationMessage For="@(()=>dto.CategoryName)" />
+                </div>
+                <div class="form-group">
+                    <label for="personallimit">Limit osób</label>
+                    <InputNumber id="personallimit" @bind-Value="dto.PersonalLimit" class="form-control" />
+                    <ValidationMessage For="@(()=>dto.PersonalLimit)" />
+                </div>
+                <div class="form-group">
+                    <label for="place">Miejsce spotkania</label>
+                    <InputText id="place" @bind-Value="dto.Place" class="form-control" />
+                    <ValidationMessage For="@(()=>dto.Place)" />
+                </div>
+                <div class="form-group">
+                    <label for="date">Data</label>
+                    <InputDate id="date" @bind-Value="dateInputValue" class="form-control" />
+                </div>
+                <button class="btn btn-primary btn-md active" type="submit">Dodaj spotkanie</button>
+            </EditForm>
+        </Authorized>
+        <NotAuthorized>
+            <p>Nie masz uprawnień</p>
+        </NotAuthorized>
+    </AuthorizeView>
+    </div>
+    @code {
+        private CreateMeetingDto dto = new CreateMeetingDto();
+        DateTime dateInputValue { get; set; } = DateTime.Now;
+
+        private async void HandleCreateMeeting()
+        {
+            dto.Date = dateInputValue;
+            HttpResponseMessage response = await http.PostAsJsonAsync("meeting/new_meeting", dto);
+            _navigationManager.NavigateTo("/meeting");
+        }
     }
-}

@@ -1,66 +1,86 @@
 ﻿@page "/meeting/edit/{id:int}"
 @inject NavigationManager _navigationManager
 @inject HttpClient http
-@using SportsMeeting.Shared.Dto
-<h3>MeetingForm</h3>
+    
+<section class="jumbotron text-center">
+    <h3>Edytuj spotkanie</h3>
+</section>
+<div class="container">
 <AuthorizeView Roles="User">
     <Authorized Context="Auth">
-        <EditForm Model="meeting" OnSubmit="HandleDelete">
+        <EditForm Model="@meeting" OnSubmit="HandleDelete">
             <button class="btn btn-danger btn-md active" type="submit">Usuń spotkanie</button>
         </EditForm>
-        <EditForm Model="meeting" OnSubmit="HandleEditMeeting">
+        <EditForm Model="@meeting" OnSubmit="HandleEditMeeting">
+            <DataAnnotationsValidator />
             <div class="form-group">
-                <label for="title">Title</label>
+                <label for="title">Tytuł</label>
                 <InputText id="title" @bind-Value="meeting.Title" class="form-control" />
+                <ValidationMessage For="@(()=>meeting.Title)" />
             </div>
             <div class="form-group">
-                <label for="description">Description</label>
+                <label for="description">Opis spotkania</label>
                 <InputText id="description" @bind-Value="meeting.Description" class="form-control" />
+                <ValidationMessage For="@(()=>meeting.Description)" />
             </div>
             <div class="form-group">
-                <label for="personallimit">Limit</label>
+                <InputSelect class="custom-select d-block w-25" @bind-Value="meeting.CategoryName" aria-label="Default select example">
+                    <option selected>Wybierz kategorię</option>
+                    <option value="football">Piłka nożna</option>
+                    <option value="golf">Golf</option>
+                    <option value="volleyball">Siatkówka</option>
+                    <option value="basketball">Koszykówka</option>
+                    <option value="biliard">Bilard</option>
+                    <option value="esport">E-Sport</option>
+                    <option value="other">Inne</option>
+                </InputSelect>
+                <ValidationMessage For="@(()=>meeting.CategoryName)" />
+            </div>
+            <div class="form-group">
+                <label for="personallimit">Limit osób</label>
                 <InputNumber id="personallimit" @bind-Value="meeting.PersonalLimit" class="form-control" />
+                <ValidationMessage For="@(()=>meeting.PersonalLimit)" />
             </div>
             <div class="form-group">
-                <label for="place">Place</label>
+                <label for="place">Miejsce spotkania</label>
                 <InputText id="place" @bind-Value="meeting.Place" class="form-control" />
+                <ValidationMessage For="@(()=>meeting.Place)" />
             </div>
             <div class="form-group">
                 <label for="date">Data</label>
-                <InputDate id="date" @bind-Value="meeting.Date" class="form-control" />
+                <InputDate id="date" @bind-Value="dateInputValue" class="form-control" />
             </div>
-            <button type="submit">Edytuj spotkanie</button>
+            <button class="btn btn-primary btn-md active" type="submit">Edytuj spotkanie</button>
         </EditForm>
     </Authorized>
     <NotAuthorized>
         <p>Nie masz uprawnień</p>
     </NotAuthorized>
 </AuthorizeView>
+</div>
 @code {
-    private List<MeetingDto> dto = new List<MeetingDto>();
     private MeetingDto meeting = new MeetingDto();
+    DateTime dateInputValue { get; set; } = DateTime.Now;
 
     [Parameter]
     public int id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        dto = await http.GetFromJsonAsync<List<MeetingDto>>("meeting");
-        meeting = dto.FirstOrDefault(d => d.Id == id);
+        meeting = await http.GetFromJsonAsync<MeetingDto>("meeting/edit/" + id);
     }
 
     private async void HandleEditMeeting()
     {
-
+        meeting.Date = dateInputValue;
         HttpResponseMessage response = await http.PostAsJsonAsync("meeting/edit", meeting);
         _navigationManager.NavigateTo("/meeting");
     }
 
     private async void HandleDelete()
     {
-        var id = meeting.Id;
-        HttpResponseMessage response = await http.DeleteAsync("meeting/delete/" + id);
-        _navigationManager.NavigateTo("/meeting");
+        HttpResponseMessage response = await http.DeleteAsync("meeting/delete/" + meeting.Id);
+                _navigationManager.NavigateTo("/meeting");
     }
 
 
