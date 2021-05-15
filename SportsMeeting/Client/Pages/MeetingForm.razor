@@ -22,7 +22,8 @@
                     <ValidationMessage For="@(()=>dto.Description)" />
                 </div>
                 <div class="form-group">
-                    <InputSelect class="custom-select d-block w-25" @bind-Value="dto.CategoryName" aria-label="Default select example">
+                    <label for="category">Kategoria</label>
+                    <InputSelect id="category" class="custom-select d-block w-25" @bind-Value="dto.CategoryName" aria-label="Default select example">
                         <option selected>Wybierz kategorię</option>
                         <option value="football">Piłka nożna</option>
                         <option value="golf">Golf</option>

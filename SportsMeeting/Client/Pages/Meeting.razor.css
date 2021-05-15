@@ -115,3 +115,12 @@ h2 {
     margin-inline-end: 0px;
     font-weight: bold;
 }
+
+.card-body{
+    width: 340px;
+    height: 170px;
+}
+
+.btn {
+    margin: 2px;
+}

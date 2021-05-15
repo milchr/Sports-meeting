@@ -102,36 +102,32 @@
                                             <div class="card-body">
                                                 <h5 class="card-title">@meeting.Description</h5>
                                                 <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div class="btn-group">
-                                                        @if (meeting.Participants.Count <= meeting.PersonalLimit)
-                                                        {
-                                                            @if (!meeting.Participants.Exists(p => p.UserEmail == Auth.User.Identity.Name))
-                                                            {
-                                                                var userName = Auth.User.Identity.Name;
-                                                                var joinMeeting = meeting;
-                                                                <EditForm Model="joinMeeting" OnSubmit="() => JoinHandler(joinMeeting, userName)">
-                                                                    <button class="btn btn-sm btn-outline-secondary" type="submit">Dołącz @meeting.Participants.Count /@meeting.PersonalLimit</button>
-                                                                </EditForm>
-                                                            }
-                                                            else
-                                                            {
-                                                                <button class="btn btn-sm btn-outline-secondary disabled" type="submit">Dołączyłeś</button>
-                                                            }
+                                                @if (meeting.Participants.Count <= meeting.PersonalLimit)
+                                                 {
+                                                    @if (!meeting.Participants.Exists(p => p.UserEmail == Auth.User.Identity.Name))
+                                                     {
+                                                        var userName = Auth.User.Identity.Name;
+                                                        var joinMeeting = meeting;
+                                                        <EditForm Model="joinMeeting" OnSubmit="() => JoinHandler(joinMeeting, userName)">
+                                                            <button class="btn btn-sm btn-outline-secondary" type="submit">Dołącz @meeting.Participants.Count /@meeting.PersonalLimit</button>
+                                                        </EditForm>
                                                         }
                                                         else
                                                         {
-                                                            <button class="btn btn-sm btn-outline-secondary disabled" type="submit">Brak miejsc</button>
+                                                           <button class="btn btn-sm btn-outline-secondary disabled" type="submit">Dołączyłeś</button>
                                                         }
-                                                        @if (meeting.UserEmail == Auth.User.Identity.Name)
-                                                        {
-                                                            var editmeeting = meeting;
-                                                            <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
-                                                                <button class="btn btn-sm btn-outline-secondary" type="submit">Edytuj</button>
-                                                            </EditForm>
-                                                        }
-                                                    </div>
-                                                </div>
+                                                 }
+                                                 else
+                                                 {
+                                                    <button class="btn btn-sm btn-outline-secondary disabled" type="submit">Brak miejsc</button>
+                                                 }
+                                                 @if (meeting.UserEmail == Auth.User.Identity.Name)
+                                                  {
+                                                    var editmeeting = meeting;
+                                                    <EditForm Model="editmeeting" OnSubmit="() => EditHandler(editmeeting)">
+                                                        <button class="btn btn-sm btn-outline-secondary" type="submit">Edytuj</button>
+                                                    </EditForm>
+                                                  }
                                             </div>
                                             <div class="card-footer text-muted">
                                                 @if (@Convert.ToInt32(((meeting.Date - localDate).TotalDays)) == 0)

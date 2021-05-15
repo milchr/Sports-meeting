@@ -2,21 +2,21 @@
 @inject NavigationManager _navigationManager
 @inject HttpClient http
 
-    <main role="main">
-        <AuthorizeView Roles="User, Admin">
-            <Authorized Context="Auth">
-                <section class="jumbotron text-center">
-                   <h3>Twoje Spotkania</h3>
-                </section>
-                <div class="album py-5 bg-light">
-                    <div class="container">
-                        <div class="row">
-                            @foreach (var meeting in dto)
-                            {
-                                <div class="col-md-4">
-                                    <div class="card text-center mb-4 box-shadow">
-                                        <div class="card-header">
-                                            <h3>@meeting.Title</h3>
+<main role="main">
+    <AuthorizeView Roles="User, Admin">
+        <Authorized Context="Auth">
+            <section class="jumbotron text-center">
+                <h3>Twoje Spotkania</h3>
+            </section>
+            <div class="album py-5 bg-light">
+                <div class="container">
+                    <div class="row">
+                        @foreach (var meeting in dto)
+                        {
+                            <div class="col-md-4">
+                                <div class="card text-center mb-4 box-shadow">
+                                    <div class="card-header">
+                                        <h3>@meeting.Title</h3>
                                             <div>
                                                 @meeting.Category.Name
                                             </div>
@@ -58,8 +58,8 @@
             <NotAuthorized>
                 Nie masz uprawnień
             </NotAuthorized>
-        </AuthorizeView>
-    </main>
+    </AuthorizeView>
+</main>
     @code {
         private List<MeetingDto> dto = new List<MeetingDto>();
         DateTime localDate { get; set; } = DateTime.Now;
