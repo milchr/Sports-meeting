@@ -12,6 +12,8 @@ namespace SportsMeeting.Server.Models
         public string UserId{ get; set; }
         public int MeetingId { get; set; }
         public string UserEmail { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public virtual Conversation Conversation { get; set; }
         public virtual Meeting Meeting { get; set; }
         public virtual ApplicationUser User { get; set; }

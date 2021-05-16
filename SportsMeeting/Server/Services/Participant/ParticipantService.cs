@@ -97,8 +97,8 @@ namespace SportsMeeting.Server.Services
                 participantDto.UserId = p.UserId;
                 participantDto.MeetingId = p.MeetingId;
                 participantDto.UserEmail = p.UserEmail;
-                participantDto.FirstName = p.User.FirstName;
-                participantDto.LastName = p.User.LastName;
+                participantDto.FirstName = p.FirstName;
+                participantDto.LastName = p.LastName;
 
                 participants.Add(participantDto);
             }

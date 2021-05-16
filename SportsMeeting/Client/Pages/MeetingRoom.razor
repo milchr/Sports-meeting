@@ -2,11 +2,13 @@
 
 @using Microsoft.AspNetCore.SignalR.Client
 @using System.ComponentModel.DataAnnotations
-
+@using Newtonsoft.Json 
 @inject HttpClient http
 @inject NavigationManager _navigationManager
 
-<h2>@meetingDto.Title</h2>
+<section class="jumbotron text-center">
+    <h2> @(meetingDto.Title) </h2>
+</section>
 <AuthorizeView Roles="User, Admin">
     <Authorized Context="Auth">
         <div class="chat">
@@ -56,7 +58,7 @@
     public int id { get; set; }
 
     private ApplicationUserDto userDto = new ApplicationUserDto();
-    private MeetingDto meetingDto = new MeetingDto();
+    private MeetingDto meetingDto { get; set; } = new MeetingDto();
     List<ChatMessage> Messages = new List<ChatMessage>();
     HubConnection hubConnection;
     ChatMessage newChatMessage = new ChatMessage();
@@ -64,12 +66,12 @@
     protected override async Task OnInitializedAsync()
     {
         userDto = await http.GetFromJsonAsync<ApplicationUserDto>("user");
-     
+
         HttpResponseMessage response = await http.GetAsync("meeting/" + id);
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
             string meeting = await response.Content.ReadAsStringAsync();
-            meetingDto = System.Text.Json.JsonSerializer.Deserialize<MeetingDto>(meeting);
+            meetingDto = Newtonsoft.Json.JsonConvert.DeserializeObject<MeetingDto>(meeting);
         }
         else
         {

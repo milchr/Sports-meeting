@@ -101,7 +101,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <h5 class="card-title">@meeting.Description</h5>
-                                                <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
+                                                <p class="card-text">@meeting.Place</p>
                                                 @if (meeting.Participants.Count <= meeting.PersonalLimit)
                                                  {
                                                     @if (!meeting.Participants.Exists(p => p.UserEmail == Auth.User.Identity.Name))

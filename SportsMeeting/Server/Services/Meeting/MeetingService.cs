@@ -95,10 +95,11 @@ namespace SportsMeeting.Server.Services
             participantDto.UserId = u.Id;
             participantDto.MeetingId = meeting.Id;
             participantDto.UserEmail = u.Email;
+            participantDto.FirstName = u.FirstName;
+            participantDto.LastName = u.LastName;
             await _participantService.createParticipant(participantDto);
             var participant = await _participantService.getParticipantByUserEmail(u.Email);
             u.Participants.Add(participant);
-            meeting.Participants.Add(participant);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -168,10 +169,11 @@ namespace SportsMeeting.Server.Services
             participantDto.UserId = user.Id;
             participantDto.MeetingId = meeting.Id;
             participantDto.UserEmail = user.Email;
+            participantDto.FirstName = user.FirstName;
+            participantDto.LastName = user.LastName;
             await _participantService.createParticipant(participantDto);
             var participant = await _participantService.getParticipantByUserEmail(user.Email);  
             user.Participants.Add(participant);
-            meeting.Participants.Add(participant);
             await _dbContext.SaveChangesAsync();
         }
 
