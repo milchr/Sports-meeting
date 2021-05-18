@@ -23,7 +23,7 @@
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title">@meeting.Description</h5>
-                                            <p class="card-text">@meeting.PersonalLimit @meeting.Place</p>
+                                            <p class="card-text">@meeting.Place</p>
                                             @if(meeting.Participants.Exists(p => p.UserEmail == Auth.User.Identity.Name)) { 
                                                 <EditForm Model="meeting" OnSubmit="() => GoToMeetingHandler(meeting)">
                                                    <button class="btn btn-sm btn-outline-secondary" type="submit">Przejdź do wydarzenia</button>

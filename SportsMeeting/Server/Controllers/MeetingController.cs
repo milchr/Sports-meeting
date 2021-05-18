@@ -3,7 +3,6 @@ using SportsMeeting.Server.Services;
 using SportsMeeting.Shared.Dto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace SportsMeeting.Server.Controllers
 {
@@ -12,13 +11,11 @@ namespace SportsMeeting.Server.Controllers
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingService _meetingService;
-        private readonly ILogger<MeetingController> _logger;
 
 
-        public MeetingController(IMeetingService meetingService, ILogger<MeetingController> logger)
+        public MeetingController(IMeetingService meetingService)
         {
             _meetingService = meetingService;
-            _logger = logger;
         }
 
         [HttpGet]

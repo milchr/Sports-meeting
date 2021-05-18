@@ -33,6 +33,11 @@ namespace SportsMeeting.Server.Services
 
         public async Task<MeetingDto> getMeeting(int id)
         {
+            if(id == 0)
+            {
+                throw new NotFoundException("Meeting id cannot be 0");
+            }
+
             var meeting = await _dbContext.Meetings.FirstOrDefaultAsync(m => m.Id == id);
 
             if (meeting is null)
